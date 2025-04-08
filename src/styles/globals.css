@@ -1,0 +1,55 @@
+/* src/styles/globals.css */
+@config "../../tailwind.config.js";
+@import "tailwindcss";
+
+
+/* 浅色模式 */
+:root {
+  --bg: 0 0% 97%;
+  --surface: 0 0% 100%;
+  --fg: 0 0% 10%;
+  --muted: 0 0% 45%;
+  --border: 0 0% 88%;
+  --highlight: 0 0% 90%;
+
+  --primary: 211 100% 45%;        /* #0071E3 */
+  --primary-hover: 211 100% 40%;
+  --primary-active: 211 100% 35%;
+  --primary-subtle: 211 100% 95%;
+
+  --success: 145 63% 47%;
+  --success-subtle: 145 63% 95%;
+
+  --warning: 37 100% 53%;
+  --warning-subtle: 37 100% 95%;
+
+  --danger: 3 100% 58%;
+  --danger-subtle: 3 100% 96%;
+
+  /* Zinc 灰阶示例（可根据喜好调）*/
+  --zinc-50:  0 0% 98%;
+  --zinc-100: 0 0% 95%;
+  --zinc-200: 0 0% 90%;
+  --zinc-300: 0 0% 83%;
+  --zinc-400: 0 0% 70%;
+  --zinc-500: 0 0% 60%;
+  --zinc-600: 0 0% 50%;
+  --zinc-700: 0 0% 40%;
+  --zinc-800: 0 0% 20%;
+  --zinc-900: 0 0% 10%;
+}
+
+/* 深色模式 */
+.dark {
+  --bg: 0 0% 7%;
+  --surface: 0 0% 12%;
+  --fg: 0 0% 95%;
+  --muted: 0 0% 60%;
+  --border: 0 0% 25%;
+  --highlight: 0 0% 20%;
+
+  --primary: 210 100% 56%;         /* #0A84FF */
+  --primary-hover: 210 100% 50%;
+  --primary-active: 210 100% 45%;
+  --primary-subtle: 210 100% 14%;
+}

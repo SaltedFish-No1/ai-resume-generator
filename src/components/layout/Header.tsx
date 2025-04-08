@@ -1,28 +1,39 @@
-// src/components/layout/Header.tsx
 'use client'
 
 import Link from 'next/link'
+import { GlobeAltIcon } from '@heroicons/react/24/outline'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 export default function Header() {
   return (
-    <header className="w-full px-6 py-4 flex justify-between items-center border-b border-gray-200 bg-white shadow-sm">
+    <header className="fixed top-0 z-50 w-full px-8 py-4 flex justify-between items-center bg-surface/70 backdrop-blur-md border-b border-border supports-backdrop-blur">
       {/* 左侧 Logo */}
-      <Link href="/" className="text-2xl font-bold text-cyan-600 hover:opacity-80">
+      <Link href="/" className="text-base font-semibold tracking-tight text-fg">
         AI Resume
       </Link>
 
       {/* 右侧操作区 */}
-      <div className="flex items-center gap-4">
-        <button className="text-sm px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 transition">
-          🌐 EN / 中文
+      <div className="flex items-center gap-4 text-sm font-medium text-fg">
+        {/* 语言按钮 */}
+        <button
+          className="flex items-center gap-1 px-3 py-2 rounded-md hover:bg-highlight transition"
+          aria-label="切换语言"
+        >
+          <GlobeAltIcon className="w-5 h-5" />
+          EN / 中文
         </button>
-        <Link href="/auth/login">
-          <button className="text-sm px-4 py-1.5 rounded border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white transition">
-            登录 / 注册
-          </button>
+
+        {/* 主题切换按钮 */}
+        <ThemeToggle />
+
+        {/* 登录按钮 */}
+        <Link
+          href="/auth/login"
+          className="px-3 py-2 rounded-md hover:bg-highlight transition"
+        >
+          登录 / 注册
         </Link>
       </div>
     </header>
   )
 }
-
