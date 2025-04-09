@@ -118,19 +118,27 @@ ai-resume-generator/
 #### ✅ 主任务列表（核心功能）
 
 - [x] 创建 `Header.tsx`，包含 Logo、登录按钮、语言切换按钮（占位）
-- [x] 完成 `Hero.tsx`：主标题、副标题、CTA 按钮区
-- [x] 使用 Tailwind 完成响应式布局（断点适配 + 自适应按钮排列）
-- [x] 在 `layout.tsx` 中正确引入 `globals.css` 并渲染 Header + children
-- [ ] 添加 `Footer.tsx`（版权 + GitHub 链接等信息）
-- [ ] 使用语义化标签组织结构（`<header>` / `<main>` / `<footer>`）
-- [ ] 为 Hero 页面添加基础过渡动效（如 fade-in，提升质感）
-- [ ] 添加 Loading Skeleton 组件并使用 `React.Suspense` 包裹首页内容
 
+- [x] 完成 `Hero.tsx`：主标题、副标题、CTA 按钮区
+
+- [x] 使用 Tailwind 完成响应式布局（断点适配 + 自适应按钮排列）
+
+- [x] 在 `layout.tsx` 中正确引入 `globals.css` 并渲染 Header + children
+
+- [x] 添加 `Footer.tsx`（版权 + GitHub 链接等信息）
+
+- [x] 使用语义化标签组织结构（`<header>` / `<main>` / `<footer>`）
+
+- [x] 为 Hero 页面添加基础过渡动效（如 fade-in，提升质感）
+
+- [ ] ~~添加 Loading Skeleton 组件并使用 `React.Suspense` 包裹首页内容~~
+
+  > Hero组件是静态组件，不需要
 ---
 
 #### ⏳ 延迟处理的任务（将拆分为后续独立子任务）
 
-- [ ] 引入 `next-themes` 完成暗黑模式切换（推荐放在 MVP 4：表单体验完善 后完成）
+- [x] 引入 `next-themes` 完成暗黑模式切换（推荐放在 MVP 4：表单体验完善 后完成）
 - [ ] 引入 `next-intl` 实现多语言切换（推荐放在 MVP 3 表单完成后单独执行）
 
 > ✅ 当前 UI 中已提供语言切换按钮，占位未接入功能逻辑。
@@ -169,128 +177,160 @@ ai-resume-generator/
 
 ---
 
-### 🧑‍💼 MVP 2：简历构建页页面搭建
+### ✅ MVP 2：用户认证系统 🔐
 
-> 🎯 目标：创建简历构建页 `/builder`，搭建页面结构（表单 + 预览）
+> 🎯 目标：实现基础登录 / 注册功能，构建用户上下文。
 
-- [ ] `app/builder/page.tsx` 页面骨架：两栏布局
-- [ ] 左侧用于表单，右侧实时显示预览组件
-- [ ] 使用 React state 管理表单与预览同步
+#### ✅ 实现成果：
 
-📚 学习内容：
-- 页面布局分栏技巧
-- `useState` / props 传值结构
-- 动态组件结构管理
+- [x] 登录/注册页面：`/auth/login`、`/auth/register` ✅
+- [x] 注册后发送邮箱验证 ✅
+- [x] 登录成功判断是否验证 ✅
+- [x] 全局用户上下文：`useUser()` + `AuthProvider` ✅
+- [x] 用户状态持久化（使用 Firebase 默认机制）✅
+- [x] 页面访问保护：middleware.ts 保护 `/builder`、`/profile/edit` ⏳
 
----
+#### 📚 学习重点：
 
-### 📝 MVP 3：表单模块构建（用户基本信息）
+- Firebase Auth 登录机制与 SDK 使用
+- `react-hook-form` + `zod` 表单构建 + 校验
+- 用户状态封装（Context + Hook）
+- 邮箱验证流程 + 重定向逻辑
+- 基于登录状态的跳转控制（如未验证跳转）
 
-> 🎯 目标：实现用户基本信息输入表单模块，包含表单验证
 
-- [ ] 使用 `react-hook-form` 构建输入字段
-- [ ] 使用 `zod` 进行字段验证
-- [ ] 封装通用 `Input.tsx`、`Label.tsx` 等 UI 组件
+------
 
-📚 学习内容：
-- `react-hook-form` 控制表单生命周期
-- `zod` + `resolver` 联动校验机制
-- 表单数据结构与类型定义
+### ✅ MVP 3：用户信息编辑页（`/profile/edit`）
 
----
+> 🎯 目标：收集用户基本信息，供后续简历生成使用。
 
-### 📚 MVP 4：动态项目经历输入（数组字段）
+#### 📝 ToDo List：
 
-> 🎯 目标：支持添加多个项目经历，字段可增删
+- [ ] 创建页面 `app/profile/edit/page.tsx`
+- [ ] 使用 `react-hook-form` 构建表单
+- [ ] 使用 `zod` 实现字段验证（姓名、职位、个人简介等）
+- [ ] 上传 PDF 简历（组件预留，未来支持解析）
+- [ ] 表单提交后写入 Firestore（`users/{uid}/profile`）
 
-- [ ] 使用 `useFieldArray` 实现动态字段
-- [ ] 添加/删除按钮交互
-- [ ] 将经历列表实时传入简历预览模块
+📚 学习重点：
 
-📚 学习内容：
-- 动态列表表单处理技巧
-- 深层嵌套表单对象管理
-- 表单与预览联动逻辑设计
+- RHF + zod 联动验证
+- 表单状态管理
+- Firestore 数据建模 & 写入
 
----
+------
 
-### 🤖 MVP 5：接入 OpenAI API，生成简历内容
+### ✅ MVP 4：简历构建页（`/builder` 页面）
 
-> 🎯 目标：接入 GPT 接口，生成个性化简历文案
+> 🎯 目标：用户输入 Job Description → 实时预览生成的简历。
 
-- [ ] 在 `lib/openai.ts` 封装 GPT 请求函数
-- [ ] 使用 Server Action (`app/builder/actions.ts`) 实现服务端请求
-- [ ] 处理 loading/error 状态，生成结果展示
+#### 📝 ToDo List：
 
-📚 学习内容：
-- Server Actions 基础用法
-- 调用 OpenAI 接口（GPT-4）
-- 服务器端与客户端状态管理配合
+- [ ] 页面布局为双栏结构（输入 + 预览）
+- [ ] 输入字段：职位名称（可选）、职位描述（必填）
+- [ ] 状态管理：`useState` 管理 JD + 职位名
+- [ ] 预览模块：根据用户资料 + 输入展示生成内容（模拟数据即可）
 
----
+📚 学习重点：
 
-### ☁️ MVP 6：将数据存入 Firebase Firestore
+- 响应式双栏结构（`flex-col md:flex-row`）
+- props 状态同步
+- 表单输入联动渲染
 
-> 🎯 目标：将用户简历数据持久化到 Firebase 数据库中
+------
 
-- [ ] 初始化 Firebase 客户端 SDK
-- [ ] 使用 Admin SDK 在 Server Action 中写入数据
-- [ ] 将用户每次生成记录保存在 `users/{uid}/resumes`
+### ✅ MVP 5：接入 OpenAI GPT 生成简历
 
-📚 学习内容：
-- Firebase 权限配置与数据结构设计
-- Server 端安全访问 Firebase（Admin SDK）
-- 数据与用户关联建模
+> 🎯 目标：调 OpenAI API，根据用户资料 + JD 生成个性化简历内容。
 
----
+#### 📝 ToDo List：
 
-### 🔐 MVP 7：用户登录 / 注册（Firebase Auth）
+- [ ] 封装 `lib/openai.ts`，构造 prompt + 请求
+- [ ] 创建 `app/builder/actions.ts` 中 Server Action 进行服务端请求
+- [ ] 接收内容后更新 preview 内容
+- [ ] 处理 loading 状态 / 报错提示
 
-> 🎯 目标：实现基础登录注册功能（邮箱/密码）
+📚 学习重点：
 
-- [ ] 构建登录/注册 UI 页面
-- [ ] 使用 `firebase/auth` 实现登录注册
-- [ ] 将用户状态传入全局 Provider
-- [ ] 使用 `middleware.ts` 保护需要登录的页面（如 `/builder`）
+- GPT prompt 构建技巧
+- Server Actions 基本用法
+- 服务端异步数据请求 + 客户端渲染反馈
 
-📚 学习内容：
-- Firebase 客户端登录流程
-- 用户上下文管理（`useUser()`）
-- 页面访问权限控制
+------
 
----
+### ✅ MVP 6：数据持久化到 Firebase Firestore
 
-### 📄 MVP 8：简历 PDF 导出功能
+> 🎯 目标：将生成后的简历保存，支持查看 / 编辑 / 导出。
 
-> 🎯 目标：将简历预览一键导出为 PDF 文件
+#### 📝 ToDo List：
 
-- [ ] 使用 `@react-pdf/renderer` 创建 PDF 模板
-- [ ] 添加 “导出 PDF” 按钮
-- [ ] 支持命名保存、自动下载功能
+- [ ] 初始化 Firebase Admin SDK（用于 Server Action 写入）
+- [ ] 创建简历保存接口，路径为：`users/{uid}/resumes/{resumeId}`
+- [ ] 预留 resume 列表接口（可用于历史简历管理）
+- [ ] 确保用户只能访问自己数据（Firestore Rules）
 
-📚 学习内容：
-- PDF 渲染组件使用方法
-- 动态渲染数据并导出为文件
-- 性能优化（懒加载、预编译）
+📚 学习重点：
 
----
+- Admin SDK 使用（服务端安全访问）
+- Firestore 数据结构设计
+- 权限验证 & 用户绑定数据策略
 
-## 📈 项目目标总结
+------
 
-| 阶段  | 目标            | 技术收益                 |
-| ----- | --------------- | ------------------------ |
-| MVP 1 | 首页展示        | 布局 + 响应式 + Tailwind |
-| MVP 2 | 页面结构        | 路由机制 + 状态提升      |
-| MVP 3 | 表单模块        | 表单处理 + 表单验证      |
-| MVP 4 | 动态输入        | 列表动态表单 + 数据映射  |
-| MVP 5 | AI 生成         | API 调用 + Server Action |
-| MVP 6 | Firebase 持久化 | 数据建模 + 权限控制      |
-| MVP 7 | 用户认证        | 登录注册流程             |
-| MVP 8 | PDF 导出        | 第三方工具集成能力       |
+### ✅ MVP 7：PDF 导出功能 📄
 
----
+> 🎯 目标：一键将简历导出为 PDF 文件。
 
-## 🧭 开发提示
+#### 📝 ToDo List：
+
+- [ ] 使用 `@react-pdf/renderer` 构建 resume PDF 模板
+- [ ] 添加「导出 PDF」按钮
+- [ ] 下载生成的 PDF，支持命名
+- [ ] 保持样式一致（主题色 + 字体）
+
+📚 学习重点：
+
+- 动态数据渲染 PDF
+- `@react-pdf/renderer` 使用方法
+- PDF 性能优化（懒加载、组件拆分）
+
+------
+
+### ✅ MVP 8：项目增强与扩展（暗黑模式 / 多语言 / 响应式优化）
+
+> 🎯 目标：提升产品完整性与可国际化能力。
+
+#### 📝 ToDo List：
+
+- [ ] 使用 `next-themes` 实现主题切换
+- [ ] 接入 `next-intl` 管理中英文翻译文件
+- [ ] 响应式优化各表单 / 卡片 / 预览组件
+- [ ] 多语言切换按钮接入实际逻辑（语言记忆）
+
+📚 学习重点：
+
+- 主题切换与 CSS 变量联动
+- i18n 路由结构 & 文案管理
+- 多语言布局适配 & 用户偏好处理
+
+------
+
+### 🧭 最终建议开发节奏
+
+| 阶段  | 任务概括              | 是否可上线演示 |
+| ----- | --------------------- | -------------- |
+| MVP 1 | 首页 + 配色系统       | ✅ 是           |
+| MVP 2 | 登录注册              | ✅ 是           |
+| MVP 3 | 用户资料填写          | ✅ 是           |
+| MVP 4 | 简历构建页面          | ✅ 是           |
+| MVP 5 | GPT 内容生成          | ✅ 是           |
+| MVP 6 | Firestore 保存记录    | ✅ 是           |
+| MVP 7 | PDF 导出              | ✅ 是           |
+| MVP 8 | 多语言 / 暗黑模式增强 | ✅ 可选         |
+
+
+#### 🧭 开发提示
 
 - 每完成一个 MVP，建议写一份 dev log 或 issue 小结 ✅
 - 尝试部署到 Vercel，持续集成测试自己的产品上线流程

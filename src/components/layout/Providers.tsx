@@ -4,6 +4,7 @@
 import { ThemeProvider } from 'next-themes'
 import { ReactNode } from 'react'
 import Script from 'next/script'
+import { AuthProvider } from '@/lib/context/auth'
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
@@ -13,9 +14,11 @@ export default function Providers({ children }: { children: ReactNode }) {
         {`(function(){try{var e=localStorage.getItem("theme");if(!e)return;document.documentElement.classList.add(e);}catch(e){}})();`}
       </Script>
 
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        {children}
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </AuthProvider>
     </>
   )
 }

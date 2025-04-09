@@ -3,14 +3,12 @@
 import Link from 'next/link'
 import { GlobeAltIcon } from '@heroicons/react/24/outline'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import AppLogo from '@/components/ui/AppLogo'
 
 export default function Header() {
   return (
-    <header className="fixed top-0 z-50 w-full px-8 py-4 flex justify-between items-center bg-surface/70 backdrop-blur-md border-b border-border supports-backdrop-blur">
-      {/* 左侧 Logo */}
-      <Link href="/" className="text-base font-semibold tracking-tight text-fg">
-        AI Resume
-      </Link>
+    <header className="fixed top-0 z-50 w-full px-8 py-4 flex justify-between items-center bg-surface/70 backdrop-blur-lg border-b border-border supports-backdrop-blur">
+      <AppLogo />
 
       {/* 右侧操作区 */}
       <div className="flex items-center gap-4 text-sm font-medium text-fg">
