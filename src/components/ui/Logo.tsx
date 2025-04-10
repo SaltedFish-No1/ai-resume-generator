@@ -35,3 +35,12 @@ export default function Logo({ className }: { className?: string }) {
     </div>
   )
 }
+
+
+export function loadingLogo() {
+  return (
+    <div className="flex justify-center items-center h-screen bg-bg text-fg">
+      <Logo className="w-16 h-16" />
+    </div>
+  )
+}

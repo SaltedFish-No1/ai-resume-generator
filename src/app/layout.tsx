@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Providers from '@/components/layout/Providers'
 
+
 //debugger
 
 const inter = Inter({ subsets: ['latin'] })
@@ -20,6 +21,7 @@ export const metadata = {
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+
   return (
     <html lang="zh" suppressHydrationWarning>
       <body className={`${inter.className} bg-bg text-fg`}>

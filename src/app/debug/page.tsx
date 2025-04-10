@@ -5,6 +5,7 @@ import { title } from 'process'
 
 export default function DebugHomePage() {
   const pages = [
+    { title: '表单调试', path: '/debug/form-test' },
     { title: '颜色测试', path: '/debug/color-test' },
     { title: 'Firebase 实例调试', path: '/debug/firebase-test' },
     { title: '当前用户状态', path: '/debug/auth-status' },
