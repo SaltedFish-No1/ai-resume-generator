@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { auth } from '@/lib/firebase/client'
 import { useUser } from '@/lib/context/auth'
 import { useState, useRef, useEffect } from 'react'
+import { Button } from '../ui/Button'
 
 export default function UserMenu() {
   const { user } = useUser()
@@ -36,12 +37,16 @@ export default function UserMenu() {
 
   return (
     <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="px-3 py-2 rounded-md hover:bg-highlight transition"
+      <Button
+        variant="ghost"
+        className="gap-2 px-3 py-2"
+        aria-label="用户菜单"
+        size="sm"
+        onClick={() => setOpen((prev) => !prev)}
       >
-        {user.displayName || user.email || '用户'}
-      </button>
+        {(user.displayName || user.email || '')}
+      </Button>
+
 
       <AnimatePresence>
         {open && (

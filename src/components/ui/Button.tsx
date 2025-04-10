@@ -1,9 +1,10 @@
 // src/components/ui/Button.tsx
 import { clsx } from "clsx";
-import LoadingIndicator from "./LoadingIndicator";
+import LoadingIndicator from "@/components/ui/animations/LoadingIndicator";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
   children: React.ReactNode;
   href?: string;
   isLoading?: boolean;
@@ -12,6 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button({
   variant = "primary",
+  size = "md",
   href,
   className,
   isLoading = false,
@@ -22,24 +24,29 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50";
+    "inline-flex items-center justify-center gap-2 rounded-md font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer";
 
   const variants = {
     primary:
       "bg-primary text-surface hover:bg-primary-hover active:bg-primary-active disabled:bg-primary/50 disabled:cursor-not-allowed",
     secondary:
       "bg-primary-subtle text-primary border border-primary/30 hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed",
+    ghost:
+      "bg-transparent text-fg hover:bg-highlight disabled:opacity-50 disabled:cursor-not-allowed",
   };
 
-  const composed = clsx(base, variants[variant], className);
+  const sizes = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-base",
+    lg: "px-6 py-3 text-lg",
+  };
 
+  const composed = clsx(base, variants[variant], sizes[size], className);
   const content = isLoading ? (
     <LoadingIndicator text={loadingText} size={20} />
   ) : (
     children
   );
-
-  // 设置默认按钮类型（智能推断）
   const buttonType = type ?? "submit";
 
   if (href) {

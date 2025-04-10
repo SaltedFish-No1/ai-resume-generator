@@ -33,7 +33,7 @@ export default function AppLogo() {
           transition={{ type: 'spring', stiffness: 300 }}
           className="flex items-center justify-center"
         >
-          <Logo className={clsx('w-8 h-8 transition-transform duration-300', logoColorClass)} />
+          <Logo className={clsx('w-8 h-8 transition-transform duration-300', logoColorClass)} hoverEffect={true} />
         </motion.div>
         <span className={clsx('text-base font-semibold tracking-tight', theme === 'dark' ? 'text-white' : 'text-zinc-900')}>AI Resume</span>
       </Link>

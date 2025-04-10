@@ -4,6 +4,7 @@ import { UseFormReturn, useFieldArray, Controller } from "react-hook-form";
 import { ResumeData } from "@/lib/validators/resume";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { X } from "lucide-react";
 
 interface Props {
   form: UseFormReturn<ResumeData>;
@@ -23,7 +24,7 @@ export function ProjectFormList({ form }: Props) {
 
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4 text-fg">项目经历</h2>
+      <h2 className="text-xl font-semibold mb-4 text-fg">项目 / 成果经历</h2>
 
       {fields.map((field, index) => (
         <div
@@ -39,33 +40,61 @@ export function ProjectFormList({ form }: Props) {
             />
           </div>
 
-          {/* 技术栈 */}
+          {/* 技能 / 工具标签输入 */}
           <div>
-            <label className="block font-medium text-fg">
-              技术栈（多个用英文逗号分隔）
-            </label>
+            <label className="block font-medium text-fg mb-1">关键技能 / 工具</label>
             <Controller
               control={control}
               name={`projects.${index}.techStack`}
-              render={({ field }) => (
-                <input
-                  value={
-                    Array.isArray(field.value)
-                      ? field.value.join(", ")
-                      : field.value || ""
+              defaultValue={[]}
+              render={({ field }) => {
+                const tags: string[] = Array.isArray(field.value) ? field.value : [];
+
+                const addTag = (value: string) => {
+                  const trimmed = value.trim();
+                  if (trimmed && !tags.includes(trimmed)) {
+                    field.onChange([...tags, trimmed]);
                   }
-                  onChange={(e) =>
-                    field.onChange(
-                      e.target.value
-                        .split(",")
-                        .map((s) => s.trim())
-                        .filter(Boolean)
-                    )
-                  }
-                  placeholder="React, Tailwind CSS, Firebase"
-                  className="w-full bg-surface text-fg border border-border rounded px-3 py-2"
-                />
-              )}
+                };
+
+                const removeTag = (idx: number) => {
+                  const newTags = [...tags];
+                  newTags.splice(idx, 1);
+                  field.onChange(newTags);
+                };
+
+                return (
+                  <div className="flex flex-wrap items-center gap-2 border border-border rounded px-3 py-2 bg-surface">
+                    {tags.map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center bg-highlight text-sm text-fg px-2 py-1 rounded-full"
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => removeTag(idx)}
+                          className="ml-1 text-fg hover:text-danger"
+                        >
+                          <X size={14} />
+                        </button>
+                      </span>
+                    ))}
+                    <input
+                      type="text"
+                      placeholder="输入后回车"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addTag(e.currentTarget.value);
+                          e.currentTarget.value = "";
+                        }
+                      }}
+                      className="flex-1 min-w-[100px] border-none focus:outline-none bg-transparent text-fg placeholder:text-muted"
+                    />
+                  </div>
+                );
+              }}
             />
           </div>
 

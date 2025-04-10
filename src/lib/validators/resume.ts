@@ -98,6 +98,8 @@ export const resumeSchema = z.object({
   availability: z.string().optional(),
 
   locationPreference: z.string().optional(),
+
+  resumePdfUrl: z.string().url().optional(),
 });
 
 // 推导类型导出

@@ -13,6 +13,7 @@ export default function DebugHomePage() {
     { title: 'Firestore 数据查看（预留）', path: '/debug/firestore-view' },
     { title: 'Logo测试', path: '/debug/logo-test' },
     { title: 'Middleware 测试', path: '/debug/middleware-test' },
+    { title: 'Animation 测试', path: '/debug/animation-test' },
   ]
 
   return (

@@ -199,26 +199,47 @@ ai-resume-generator/
 
 
 ------
+当前进度非常不错，已经完成了绝大部分功能 🎉。以下是你最新的 ToDo 状态更新：
+
+---
 
 ### ✅ MVP 3：用户信息编辑页（`/profile/edit`）
 
 > 🎯 目标：收集用户基本信息，供后续简历生成使用。
 
-#### 📝 ToDo List：
+#### ✅ 已完成：
 
-- [ ] 创建页面 `app/profile/edit/page.tsx`
-- [ ] 使用 `react-hook-form` 构建表单
-- [ ] 使用 `zod` 实现字段验证（姓名、职位、个人简介等）
-- [ ] 上传 PDF 简历（组件预留，未来支持解析）
-- [ ] 表单提交后写入 Firestore（`users/{uid}/profile`）
+- ✅ 创建页面 `app/profile/edit/page.tsx`
+- ✅ 使用 `react-hook-form` 构建表单
+- ✅ 使用 `zod` 实现字段验证（姓名、职位、个人简介等）
+- ✅ 上传 PDF 简历（已实现上传、预留解析接口）
+- ✅ 表单提交后写入 Firestore（`users/{uid}/profile`）
+- ✅ 表单 Skeleton 加载动画
+- ✅ 表单字段组件模块化
+- ✅ 使用统一 Button、错误展示、响应式设计
 
-📚 学习重点：
+#### 📌 待办：
 
-- RHF + zod 联动验证
-- 表单状态管理
-- Firestore 数据建模 & 写入
+- [ ] 简历 PDF 文件上传成功后解析（使用 GPT）
+- [ ] 设置 Firebase Storage 的 CORS（需 CLI 配置）
+- [ ] 表单校验规则增强（如电话格式、URL 校验等）
+- [ ] 上传文件进度条（优化 UX，可选）
 
-------
+---
+
+📚 学习重点回顾：
+
+| 技术 | 应用示例 |
+|------|----------|
+| RHF + Zod | `useForm + zodResolver` 实现表单验证 |
+| 状态管理 | `useState`, `useEffect`, `useUser` 等管理加载、上传、提交状态 |
+| Firestore 数据建模 | `users/{uid}/profile/base` 文档结构 |
+| Firebase Storage 上传 | 上传文件、获取下载链接、显示链接 |
+| 组件设计 | 表单字段拆分为模块，支持 Skeleton 占位、解耦 |
+
+---
+
+
 
 ### ✅ MVP 4：简历构建页（`/builder` 页面）
 

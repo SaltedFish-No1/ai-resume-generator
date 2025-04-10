@@ -4,6 +4,7 @@ import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { ResumeData } from "@/lib/validators/resume";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Trash2 } from "lucide-react";
 
 type Props = {
   form: UseFormReturn<ResumeData>;
@@ -25,7 +26,7 @@ export function EducationFormList({ form }: Props) {
           {errors.education.message}
         </p>
       )}
-      
+
 
       {fields.map((field, index) => (
         <div
@@ -100,15 +101,19 @@ export function EducationFormList({ form }: Props) {
             />
           </div>
 
+          {/* 删除按钮 */}
           <div className="text-right">
             <button
               type="button"
               onClick={() => remove(index)}
-              className="text-sm text-danger hover:underline"
+              className="text-muted hover:text-danger transition"
+              title="删除教育经历"
+              aria-label="删除教育经历"
             >
-              删除此项
+              <Trash2 size={16} />
             </button>
           </div>
+
         </div>
       ))}
 

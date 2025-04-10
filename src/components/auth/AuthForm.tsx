@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { registerWithEmail, loginWithEmail } from '@/lib/firebase/auth'
 import { setAuthTokenCookie } from '@/lib/auth/cookies'
+import { Button } from '@/components/ui/Button'
 
 type AuthMode = 'login' | 'register'
 
@@ -107,13 +108,21 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </div>
       )}
 
-      <button
+      {/* <button
         type="submit"
         className="w-full px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-md transition disabled:opacity-50"
         disabled={loading}
       >
         {loading ? '提交中...' : mode === 'login' ? '登录' : '注册'}
-      </button>
+      </button> */}
+
+      <Button
+        type="submit"
+        className="w-full bg-primary hover:bg-primary-hover text-white rounded-md text-sm font-medium transition disabled:opacity-50"
+        disabled={loading}
+      >
+        {loading ? (mode === 'login' ? '登录中...' : '注册中...') : mode === 'login' ? '登录' : '注册'}
+      </Button>
     </form>
   )
 }
