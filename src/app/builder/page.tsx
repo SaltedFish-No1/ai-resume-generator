@@ -64,8 +64,10 @@ export default function ResumeBuilderPage() {
         <section className="w-full md:w-1/2 bg-surface rounded-2xl shadow-md p-6 border border-border">
           <ResumePreview
             data={{
-              name: userProfile?.name || "张三",
-              title: jobTitle || userProfile?.title || "前端工程师",
+              // name: userProfile?.name || "张三",
+              // title: jobTitle || userProfile?.title || "前端工程师",
+              name: "张三",
+              title: "前端工程师"
               summary: "这里会展示系统生成的简历内容...",
             }}
           />
