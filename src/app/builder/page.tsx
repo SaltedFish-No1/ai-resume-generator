@@ -67,7 +67,7 @@ export default function ResumeBuilderPage() {
               // name: userProfile?.name || "张三",
               // title: jobTitle || userProfile?.title || "前端工程师",
               name: "张三",
-              title: "前端工程师"
+              title: "前端工程师",
               summary: "这里会展示系统生成的简历内容...",
             }}
           />
