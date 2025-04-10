@@ -2,7 +2,6 @@
 
 AI Resume Generator 是一个基于现代技术栈构建的 AI 简历生成器项目，目标是实现一个支持内容生成、实时预览和 PDF 导出的智能工具。在这个过程中，我将以“边做边学”的方式系统学习 **Next.js（App Router）**、**React**、**Tailwind CSS**、**Firebase** 和 **OpenAI API**。
 
-> 📌 当前进度：**已完成基础项目结构搭建，核心功能开发尚未开始。**
 
 ---
 
