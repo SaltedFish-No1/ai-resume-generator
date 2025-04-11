@@ -1,23 +1,76 @@
 // components/builder/ResumePreview.tsx
-type ResumeData = {
-    name: string
-    title: string
-    summary: string
-  }
-  
-  type Props = {
-    data: ResumeData
-  }
-  
-  export default function ResumePreview({ data }: Props) {
+'use client'
+
+import { useUser } from '@/lib/context/auth'
+import { db } from '@/lib/firebase/client'
+import { getDoc, doc } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
+import { ResumeData } from '@/lib/validators/resume'
+import BasicInfo from '@/components/builder/preview/BasicInfo'
+import Section from '@/components/builder/preview/Section'
+import EducationList from '@/components/builder/preview/EducationList'
+import ExperienceList from '@/components/builder/preview/ExperienceList'
+import ProjectList from '@/components/builder/preview/ProjectList'
+import SkillsList from '@/components/builder/preview/SkillsList'
+
+async function getUserProfile(uid: string): Promise<ResumeData | null> {
+  const docRef = doc(db, 'users', uid, 'profile', 'base')
+  const docSnap = await getDoc(docRef)
+  return docSnap.exists() ? (docSnap.data() as ResumeData) : null
+}
+
+export default function ResumePreview() {
+  const { user } = useUser()
+  const [profile, setProfile] = useState<ResumeData | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user?.uid) return
+    getUserProfile(user.uid).then((data) => {
+      setProfile(data)
+      setLoading(false)
+    })
+  }, [user?.uid])
+
+  if (loading)
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold text-primary">{data.name || "姓名未填写"}</h1>
-        <h2 className="text-lg font-medium text-muted">{data.title || "职位未填写"}</h2>
-        <p className="text-sm leading-relaxed text-fg/80 whitespace-pre-line">
-          {data.summary || "这里会展示你的个人简介。"}
-        </p>
+      <div className="flex items-center justify-center min-h-[300px]">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
       </div>
     )
-  }
-  
+
+  if (!profile)
+    return (
+      <div className="text-center py-10 text-muted-foreground">
+        No profile found
+      </div>
+    )
+
+  return (
+    <div className="max-w-3xl mx-auto p-6 rounded-xl shadow-lg bg-[hsl(var(--surface))] text-[hsl(var(--fg))]">
+      <BasicInfo data={profile} />
+      <div className="divide-y divide-[hsl(var(--border))]">
+        <Section title="教育经历">
+          <EducationList data={profile.education} />
+        </Section>
+        <Section title="工作经历" optional>
+          {profile.experience?.length ? (
+            <ExperienceList data={profile.experience} />
+          ) : (
+            <p className="text-sm text-muted-foreground">暂无工作经历</p>
+          )}
+        </Section>
+        <Section title="项目经历" optional>
+          {profile.projects?.length ? (
+            <ProjectList data={profile.projects} />
+          ) : (
+            <p className="text-sm text-muted-foreground">暂无项目经验</p>
+          )}
+        </Section>
+        <Section title="技能">
+          <SkillsList data={profile.skills} />
+        </Section>
+      </div>
+    </div>
+  )
+}

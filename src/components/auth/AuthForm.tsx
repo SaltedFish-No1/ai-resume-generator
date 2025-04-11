@@ -46,7 +46,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         // 登录成功后设置 Cookie
         setAuthTokenCookie(user)
 
-        router.push('/builder')
+        router.push('/dashboard') // 登录成功后跳转到仪表盘
 
         console.log('登录中...', data)
       } else {

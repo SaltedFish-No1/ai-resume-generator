@@ -7,7 +7,7 @@ export default function Footer() {
             <div>
                 Built by{' '}
                 <a
-                    href="https://github.com/your-username"
+                    href="https://github.com/SaltedFish-No1"
                     className="underline hover:text-primary transition"
                     target="_blank"
                     rel="noopener noreferrer"
