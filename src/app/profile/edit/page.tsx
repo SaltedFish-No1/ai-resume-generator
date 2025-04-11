@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/Button';
 import { ProfileEditSkeleton } from '@/components/profile/forms/skeletons/ProfileEditSkeleton';
 import { ResumeUpload } from '@/components/profile/forms/ResumeUpload';
 
+
 export default function ProfileEditPage() {
   const { user, loading: authLoading } = useUser();
 

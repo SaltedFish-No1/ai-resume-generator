@@ -58,11 +58,18 @@ export default function UserMenu() {
             className="absolute right-0 mt-2 w-40 bg-surface border border-border rounded-lg shadow-lg z-50 overflow-hidden"
           >
             <Link
+              href="/profile/account"
+              className="block px-4 py-2 text-sm hover:bg-highlight transition"
+              onClick={() => setOpen(false)}
+            >
+              账户设置
+            </Link>
+            <Link
               href="/profile/edit"
               className="block px-4 py-2 text-sm hover:bg-highlight transition"
               onClick={() => setOpen(false)}
             >
-              个人信息
+              编辑简历
             </Link>
             <button
               onClick={handleLogout}
@@ -70,6 +77,7 @@ export default function UserMenu() {
             >
               退出登录
             </button>
+
           </motion.div>
         )}
       </AnimatePresence>

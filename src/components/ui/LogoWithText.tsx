@@ -8,7 +8,20 @@ import { useTheme } from 'next-themes'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 
-export default function AppLogo() {
+
+type LogoWithTextProps = {
+  href?: string
+  hoverEffect?: boolean
+  showText?: boolean
+  className?: string
+}
+
+export default function LogoWithText({
+  href = '/',
+  hoverEffect = true,
+  showText = true,
+  className = ''
+}: LogoWithTextProps) {
   const { resolvedTheme } = useTheme()
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
@@ -22,20 +35,20 @@ export default function AppLogo() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -10 }}
+      initial={{ opacity: 0, y: 0}}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="inline-flex items-center gap-2 cursor-pointer hover:opacity-90 transition"
     >
-      <Link href="/" className="flex items-center gap-2 group">
+      <Link href={href ?? "/"} className="flex items-center gap-2 group">
         <motion.div
           whileHover={{ rotate: 12, scale: 1.1 }}
           transition={{ type: 'spring', stiffness: 300 }}
           className="flex items-center justify-center"
         >
-          <Logo className={clsx('w-8 h-8 transition-transform duration-300', logoColorClass)} hoverEffect={true} />
+          <Logo className={clsx('w-8 h-8 transition-transform duration-300', logoColorClass)} hoverEffect={hoverEffect} />
         </motion.div>
-        <span className={clsx('text-base font-semibold tracking-tight', theme === 'dark' ? 'text-white' : 'text-zinc-900')}>AI Resume</span>
+        <span className={clsx(' text-base font-semibold tracking-tight', theme === 'dark' ? 'text-white' : 'text-zinc-900')}>AI Resume</span>
       </Link>
     </motion.div>
   )

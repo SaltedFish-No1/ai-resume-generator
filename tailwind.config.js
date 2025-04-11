@@ -84,7 +84,22 @@ module.exports = {
           to: { opacity: 1 },
         },
       },
+      animation: {
+        firefly: 'firefly 4s ease-in-out infinite alternate',
+        pulseSlow: 'pulse 6s ease-in-out infinite',
+      },
+      keyframes: {
+        firefly: {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '50%': { transform: 'translate(4px, -6px) scale(1.2)' },
+          '100%': { transform: 'translate(-4px, 6px) scale(0.8)' },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
+
+
 };
+
+

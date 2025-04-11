@@ -1,10 +1,10 @@
 // src/app/page.tsx
-import Hero from '@/components/layout/sections/Hero'
+import HomeHero from "@/app/HomeHero"
 
 export default function HomePage() {
   return (
     <main>
-      <Hero />
+      <HomeHero />
     </main>
   )
 }

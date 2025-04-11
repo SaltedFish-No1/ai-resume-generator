@@ -5,15 +5,24 @@ import UserMenu from '@/components/layout/UserMenu'
 import { useUser } from '@/lib/context/auth'
 import { GlobeAltIcon } from '@heroicons/react/24/outline'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import AppLogo from '@/components/ui/AppLogo'
+import LogoWithText from '@/components/ui/LogoWithText'
 import { Button } from '@/components/ui/Button'
+import clsx from 'clsx'
 
 export default function Header() {
   const { user, loading } = useUser()
-
+  const isLogin = !!user;
   return (
     <header className="fixed top-0 z-50 w-full px-8 py-4 flex justify-between items-center bg-surface/70 backdrop-blur-lg border-b border-border supports-backdrop-blur">
-      <AppLogo />
+      {/* 左侧 Logo 区域 */}
+      {isLogin &&  (
+        <LogoWithText href='/dashboard'/>
+      )}
+      {!isLogin && (
+        <LogoWithText href='/' showText={false} />
+      )}
+
+      
 
       {/* 右侧操作区 */}
       <div className="flex items-center gap-4 text-sm font-medium text-fg">
@@ -25,7 +34,8 @@ export default function Header() {
           size='sm'
         >
           <GlobeAltIcon className="w-5 h-5" />
-          EN / 中文
+          <span className="hidden md:inline">EN / 中文</span>
+          
         </Button>
 
         {/* 主题切换按钮 */}

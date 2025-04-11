@@ -75,3 +75,13 @@ export function Button({
     </button>
   );
 }
+
+export function ResponsiveButtonRow({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mt-4 flex flex-col sm:flex-row sm:justify-end">
+      {children}
+    </div>
+  )
+}
+
+
