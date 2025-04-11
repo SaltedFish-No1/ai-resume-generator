@@ -1,0 +1,132 @@
+{
+    "teacher": {
+      "fullName": "王芳",
+      "email": "wangfang1987@126.com",
+      "phone": "+86 13829283948",
+      "jobTitle": "小学语文老师",
+      "summary": "热爱教育事业，具有 6 年小学语文教学经验，善于激发学生学习兴趣，擅长家校沟通。",
+      "skills": [
+        { "name": "语文教学设计", "level": 9 },
+        { "name": "阅读写作指导", "level": 8 },
+        { "name": "家校沟通", "level": 7 }
+      ],
+      "education": [
+        {
+          "school": "湖南第一师范学院",
+          "degree": "小学教育本科",
+          "startDate": "2012-09",
+          "endDate": "2016-07",
+          "gpa": "3.7"
+        }
+      ],
+      "experience": [
+        {
+          "company": "深圳市福田区景田小学",
+          "title": "语文教师",
+          "startDate": "2017-09",
+          "endDate": "2023-07",
+          "description": "教授三至五年级语文课程，组织班级阅读比赛、作文训练营，学生满意度达 95%。"
+        }
+      ],
+      "projects": [],
+      "awards": [],
+      "certifications": [
+        {
+          "name": "小学教师资格证",
+          "issuer": "教育部",
+          "date": "2017-03"
+        }
+      ],
+      "languages": [{ "language": "中文", "level": "母语" }],
+      "interests": ["阅读教学法", "书法", "儿童心理学"],
+      "availability": "2025年8月后可入职",
+      "locationPreference": "广州、深圳"
+    },
+    "sales": {
+      "fullName": "赵伟",
+      "email": "zhaowei88@outlook.com",
+      "phone": "+86 13711293487",
+      "jobTitle": "销售代表",
+      "summary": "拥有 4 年快消品行业销售经验，擅长客户关系维护与渠道开发，具备出色的谈判技巧。",
+      "skills": [
+        { "name": "客户关系管理", "level": 9 },
+        { "name": "数据驱动销售", "level": 8 },
+        { "name": "谈判技巧", "level": 8 }
+      ],
+      "education": [
+        {
+          "school": "南京财经大学",
+          "degree": "市场营销学士",
+          "startDate": "2014-09",
+          "endDate": "2018-07"
+        }
+      ],
+      "experience": [
+        {
+          "company": "宝洁（中国）有限公司",
+          "title": "区域销售代表",
+          "startDate": "2019-05",
+          "endDate": "2023-10",
+          "description": "负责华东区销售渠道管理，达成年度销售目标 110%，开发 KA 客户 20+。"
+        }
+      ],
+      "projects": [],
+      "awards": [],
+      "certifications": [],
+      "languages": [
+        { "language": "中文", "level": "母语" },
+        { "language": "英语", "level": "熟练" }
+      ],
+      "interests": ["商务演讲", "数据分析"],
+      "availability": "即时到岗",
+      "locationPreference": "上海"
+    },
+    "dev": {
+      "fullName": "李强",
+      "email": "liqiang.tech@gmail.com",
+      "phone": "+86 18523458791",
+      "jobTitle": "前端开发工程师",
+      "summary": "具备 3 年 React/Next.js 项目开发经验，关注性能优化与用户体验，擅长组件化设计与响应式布局。",
+      "skills": [
+        { "name": "React", "level": 9 },
+        { "name": "TypeScript", "level": 8 },
+        { "name": "Tailwind CSS", "level": 8 },
+        { "name": "Git", "level": 9 }
+      ],
+      "education": [
+        {
+          "school": "西安交通大学",
+          "degree": "软件工程",
+          "startDate": "2016-09",
+          "endDate": "2020-07"
+        }
+      ],
+      "experience": [
+        {
+          "company": "美团科技有限公司",
+          "title": "前端开发工程师",
+          "startDate": "2021-04",
+          "endDate": "2024-01",
+          "description": "参与会员系统重构，组件化提升复用率 30%，项目平均首屏加载时间缩短 25%。"
+        }
+      ],
+      "projects": [
+        {
+          "name": "AI 简历优化平台",
+          "techStack": ["Next.js", "OpenAI", "Tailwind"],
+          "description": "搭建前后端一体化简历生成平台，实现职位驱动式内容优化。",
+          "link": "https://resumebot.ai"
+        }
+      ],
+      "awards": [],
+      "certifications": [],
+      "languages": [
+        { "language": "中文", "level": "母语" },
+        { "language": "英语", "level": "CET-6" }
+      ],
+      "interests": ["开源项目", "前端博客写作"],
+      "availability": "两周内可到岗",
+      "locationPreference": "北京 / 远程"
+    }
+  }
+  

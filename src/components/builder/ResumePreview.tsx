@@ -53,20 +53,18 @@ export default function ResumePreview() {
         <Section title="教育经历">
           <EducationList data={profile.education} />
         </Section>
-        <Section title="工作经历" optional>
-          {profile.experience?.length ? (
+
+        {profile.experience?.length !== 0 && (
+          <Section title="工作经历" optional>
             <ExperienceList data={profile.experience} />
-          ) : (
-            <p className="text-sm text-muted-foreground">暂无工作经历</p>
-          )}
-        </Section>
-        <Section title="项目经历" optional>
-          {profile.projects?.length ? (
+          </Section>
+        )}
+
+        {profile.projects?.length !== 0 && (
+          <Section title="项目经历" optional>
             <ProjectList data={profile.projects} />
-          ) : (
-            <p className="text-sm text-muted-foreground">暂无项目经验</p>
-          )}
-        </Section>
+          </Section>
+        )}
         <Section title="技能">
           <SkillsList data={profile.skills} />
         </Section>

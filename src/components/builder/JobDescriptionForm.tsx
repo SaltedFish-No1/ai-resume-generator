@@ -3,7 +3,7 @@
 
 export default function JobDescriptionForm() {
     return (
-        <div className="w-full  space-y-4 bg-[hsl(var(--surface))] border border-[hsl(var(--border))] rounded-xl p-6 shadow-sm">
+        <div className="w-full h-full  space-y-4 bg-[hsl(var(--surface))] border border-[hsl(var(--border))] rounded-xl p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-[hsl(var(--fg))]">
                 职位名称
             </h2>
@@ -18,11 +18,6 @@ export default function JobDescriptionForm() {
                 className="w-full min-h-[200px] rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--highlight))] p-4 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))] transition"
                 placeholder="请粘贴目标岗位的 JD 内容，例如岗位职责、要求等..."
             />
-            <button
-                className="w-full px-4 py-2 text-white font-medium bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary-hover))] rounded-lg transition"
-            >
-                ✨ 生成个性化简历草稿
-            </button>
         </div>
     )
 }

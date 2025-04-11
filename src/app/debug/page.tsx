@@ -14,6 +14,7 @@ export default function DebugHomePage() {
     { title: 'Logo测试', path: '/debug/logo-test' },
     { title: 'Middleware 测试', path: '/debug/middleware-test' },
     { title: 'Animation 测试', path: '/debug/animation-test' },
+    { title: 'AI API 测试', path: '/debug/ai-test' },
   ]
 
   return (
