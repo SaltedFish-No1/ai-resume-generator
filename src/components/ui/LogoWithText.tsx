@@ -48,7 +48,7 @@ export default function LogoWithText({
         >
           <Logo className={clsx('w-8 h-8 transition-transform duration-300', logoColorClass)} hoverEffect={hoverEffect} />
         </motion.div>
-        <span className={clsx(' text-base font-semibold tracking-tight', theme === 'dark' ? 'text-white' : 'text-zinc-900')}>AI Resume</span>
+        <span className={clsx(' hidden sm:inline text-base font-semibold tracking-tight', theme === 'dark' ? 'text-white' : 'text-zinc-900')}>AI Resume</span>
       </Link>
     </motion.div>
   )

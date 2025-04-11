@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   console.log('🔥 middleware hit:', pathname)
 
   const token = request.cookies.get('firebaseAuthToken')?.value
-  const protectedRoutes = ['/profile', '/builder']
+  const protectedRoutes = ['/profile', '/builder', '/dashboard', '/auth/verify-email', '/auth/verified-success']
   const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
 
   if (isProtected && !token) {
@@ -21,6 +21,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/dashboard',
+    '/dashboard/:path*',
     '/profile',
     '/profile/:path*',
     '/builder',
