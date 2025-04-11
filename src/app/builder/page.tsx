@@ -17,6 +17,7 @@ export default function Page() {
         onClear={() => {}}
         onHistory={() => {}}
         onCompare={() => {}}
+        onLanChange={() => {}}
         showCompare={false}
         matchScore={null}
       />
