@@ -7,7 +7,6 @@ import {
     ExperienceData, 
     ProjectData, 
     OtherInfoData,
-    ResumeFileData 
   } from '@/types/resume'
   
   export function extractBasicInfo(data: ResumeData): BasicInfoData {
