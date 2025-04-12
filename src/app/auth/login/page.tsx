@@ -2,6 +2,8 @@
 import AuthForm from '@/components/auth/AuthForm'
 import Link from 'next/link'
 import { MouseSpotlight } from '@/components/ui/animations/MouseSpotlight'
+import { Suspense } from 'react'
+import AuthFormSkeleton from '@/components/auth/AuthFormSkeleton'
 
 export default function LoginPage() {
   return (
@@ -10,7 +12,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-6">
         <h1 className="text-2xl font-semibold text-primary">登录账号</h1>
         <p className="text-sm text-muted">欢迎回来，请使用邮箱和密码登录。</p>
-        <AuthForm mode="login" />
+        <Suspense fallback={<AuthFormSkeleton/>}>
+          <AuthForm mode="login" />
+        </Suspense>
         <p className="text-sm text-muted text-center">
           还没有账号？
           <Link href="/auth/register" className="text-primary hover:text-primary-hover font-medium ml-1">
