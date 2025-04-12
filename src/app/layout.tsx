@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Providers from '@/components/layout/Providers'
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 
 //debugger
