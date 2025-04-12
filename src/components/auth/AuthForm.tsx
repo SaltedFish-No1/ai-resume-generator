@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation'
 import { registerWithEmail, loginWithEmail } from '@/lib/firebase/auth'
 import { setAuthTokenCookie } from '@/lib/auth/cookies'
 import { Button } from '@/components/ui/Button'
+import { useSearchParams } from 'next/navigation'
+
+
 
 type AuthMode = 'login' | 'register'
 
@@ -21,6 +24,10 @@ type FormValues = {
 }
 
 export default function AuthForm({ mode }: AuthFormProps) {
+
+  const searchParams = useSearchParams()
+  const redirectPath = searchParams.get('redirect') || '/dashboard'
+
   const [loading, setLoading] = useState(false)
 
   const {
@@ -40,23 +47,23 @@ export default function AuthForm({ mode }: AuthFormProps) {
         // TODO: 登录逻辑 - Firebase signInWithEmailAndPassword
         const user = await loginWithEmail(data.email, data.password)
 
-        if(!user.emailVerified) {
-            return router.push('/auth/verify-email')
+        if (!user.emailVerified) {
+          return router.push('/auth/verify-email')
         }
         // 登录成功后设置 Cookie
         setAuthTokenCookie(user)
-        
+
         setTimeout(() => {
-            router.push('/dashboard')
+          router.push(redirectPath)
         }
-        , 1000) // 延迟 1 秒跳转到仪表盘
-        
+          , 1000) // 延迟 1 秒跳转到仪表盘
+
         console.log('登录中...', data)
       } else {
         // TODO: 注册逻辑 - Firebase createUserWithEmailAndPassword
         const user = await registerWithEmail(data.email, data.password)
         router.push('/auth/verify-email') // 发送邮箱验证邮件
-        
+
 
         console.log('注册中...', data)
       }
