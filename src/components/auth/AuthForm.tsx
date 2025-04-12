@@ -59,6 +59,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
           router.push('/auth/verify-email')
           return
         }
+        //debug
+        console.log('🔥 user:', user)
+        console.log('🔥 typeof user.getIdToken:', typeof (user as any).getIdToken)
+        //end
 
         // 获取 token，并写入 Cookie
         const token = await getIdToken(user, true)
@@ -83,6 +87,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         title: '操作失败',
         description: err.message || '发生错误，请稍后再试。'
       })
+
     } finally {
       setLoading(false)
     }
