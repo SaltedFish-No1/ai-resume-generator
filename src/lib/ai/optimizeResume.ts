@@ -1,67 +1,78 @@
-// src/lib/ai/optimizeResume.ts
-import OpenAi from "openai"
-import { ResumeData } from "@/types/resume"
-import { buildAllPrompt, SYSTEM_PROMPT } from "@/lib/ai/promptUtils"
-
+import OpenAI from 'openai'
+import { ResumeData } from '@/types/resume'
+import { buildAllPrompt, SYSTEM_PROMPT } from '@/lib/ai/promptUtils'
 
 interface OptimizeResumeProps {
-    resumeData: ResumeData;
-    jobDescription: string;
-    jobTitle?: string;
-    targetLanguage?: string;
-    model?: string;
+  resumeData: ResumeData
+  jobDescription: string
+  jobTitle?: string
+  targetLanguage?: string
+  model?: string
 }
 
-const deepseek = new OpenAi({
-    baseURL: 'https://api.deepseek.com',
-    apiKey: process.env.DEEPSEEK_API_KEY!,
+const deepseek = new OpenAI({
+  baseURL: 'https://api.deepseek.com',
+  apiKey: process.env.DEEPSEEK_API_KEY!,
 })
-/**
- * 
- * @param resumeData - 原始简历数据
- * @param jobTitle - 岗位名称（可选）
- * @param jobDescription - 岗位描述
- * @param targetLanguage - 目标语言（可选），默认为中文
- * @param model - 模型名称（可选）
- * @returns - 优化后的简历数据
- * @throws - 如果解析 JSON 失败或 LLM 没有响应，则抛出错误
- */
+
 export async function optimizeResume({
-    resumeData,
-    jobTitle,
-    jobDescription,
-    targetLanguage = "中文",
-    model = "deepseek-chat"
+  resumeData,
+  jobTitle,
+  jobDescription,
+  targetLanguage = '中文',
+  model = 'deepseek-chat',
 }: OptimizeResumeProps): Promise<ResumeData> {
-    // const prompt = `Optimize the following resume data for the job description provided. Make sure to highlight relevant skills and experiences that match the job description.`
-    const userPrompt = buildAllPrompt(resumeData, jobDescription, jobTitle, targetLanguage)
+  const userPrompt = buildAllPrompt(resumeData, jobDescription, jobTitle, targetLanguage)
 
-    const completion = await deepseek.chat.completions.create({
-        model: model,
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 60_000) // ⏱ 60 秒超时保护
+
+  let output: string | null = null
+
+  try {
+    const completion = await deepseek.chat.completions.create(
+      {
+        model,
         messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userPrompt },
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userPrompt },
         ],
-        max_tokens: 1000, // max tokens for the response
+        max_tokens: 1000,
         temperature: 0.4,
-    })
+      },
+      {
+        signal: controller.signal,
+      }
+    )
 
-    const output = completion.choices[0].message.content
+    clearTimeout(timeout)
+
+    output = completion.choices[0].message.content?.trim() || ''
+
     if (!output) {
-        throw new Error("LLM no response")
+      throw new Error('模型无返回内容')
     }
-    let parsed: ResumeData
-    try {
-        // 清除 ```json ``` 包裹
-        const cleaned = output
-            .replace(/```json/g, '')
-            .replace(/```/g, '')
-            .trim()
 
-        parsed = JSON.parse(cleaned)
-    } catch (error) {
-        console.error("Error parsing JSON response:", output)
-        throw new Error("Failed to parse LLM response")
+    // 处理 JSON 包裹 ```json ... ```
+    const cleaned = output
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .trim()
+
+    const parsed = JSON.parse(cleaned)
+
+    return parsed as ResumeData
+  } catch (err: any) {
+    clearTimeout(timeout)
+
+    console.error('🔴 优化简历失败:', err)
+    if (err.name === 'AbortError') {
+      throw new Error('AI 响应超时，请稍后重试')
     }
-    return parsed as ResumeData;
+
+    // 抛出可追踪错误（带原始输出）
+    throw new Error(
+      `优化失败：${err.message || '未知错误'}\n---原始返回内容---\n${output || '无内容'}`
+    )
+  }
 }

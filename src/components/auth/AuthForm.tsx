@@ -59,10 +59,6 @@ export default function AuthForm({ mode }: AuthFormProps) {
           router.push('/auth/verify-email')
           return
         }
-        //debug
-        console.log('🔥 user:', user)
-        console.log('🔥 typeof user.getIdToken:', typeof (user as any).getIdToken)
-        //end
 
         // 获取 token，并写入 Cookie
         const token = await getIdToken(user, true)

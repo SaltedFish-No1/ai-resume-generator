@@ -19,6 +19,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, data: optimized })
   } catch (err) {
     console.error("优化失败:", err)
+    if (err instanceof Error) {
+      console.error("详细信息:", err.message, err.stack)
+    }
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 })
   }
 }
