@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Logo from '@/components/ui/Logo'
 import { motion } from 'framer-motion'
+import { MouseSpotlight } from '@/components/ui/animations/MouseSpotlight'
 
 export default function VerifiedSuccessPage() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function VerifiedSuccessPage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 text-center bg-bg text-fg">
+      <MouseSpotlight />
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
