@@ -68,11 +68,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
         router.push(redirectPath)
 
       } else {
-        // 注册
+        // 注册 + 
         const user = await registerWithEmail(data.email, data.password)
-
-        // 主动发送邮箱验证邮件
-        await sendEmailVerification(user)
 
         // 跳转到提示页面
         router.push('/auth/verify-email')
