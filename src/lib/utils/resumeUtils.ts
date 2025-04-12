@@ -58,7 +58,7 @@ import {
     }
   }
   
-  export function extractResumeFileUrl(data: ResumeData): ResumeFileData {
-    return data.resumePdfUrl
-  }
+  // export function extractResumeFileUrl(data: ResumeData): ResumeFileData {
+  //   return data.resumePdfUrl
+  // }
   
