@@ -3,7 +3,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { ResumeData, resumeSchema } from "@/lib/validators/resume";
+import { ResumeData } from "@/types/resume";
+import { resumeSchema } from "@/lib/validators/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // 组件导入

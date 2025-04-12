@@ -13,6 +13,7 @@ import SkillsList from './preview/SkillsList'
 import OtherInfoList from './preview/OtherInfoList'
 
 import { ResumeData } from '@/types/resume'
+import ResumePreviewSkeleton from './skeletons/ResumePreviewSkeleton'
 
 interface ResumePreviewProps {
   onLoaded?: (data: ResumeData) => void
@@ -51,8 +52,8 @@ export default function ResumePreview({
 
   if (globalLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[300px]">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary" />
+      <div className="max-w-3xl mx-auto p-6 text-[hsl(var(--fg))]">
+        <ResumePreviewSkeleton />
       </div>
     )
   }
