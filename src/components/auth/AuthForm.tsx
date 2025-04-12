@@ -8,6 +8,9 @@ import { registerWithEmail, loginWithEmail } from '@/lib/firebase/auth'
 import { setAuthTokenCookie } from '@/lib/auth/cookies'
 import { Button } from '@/components/ui/Button'
 import { useSearchParams } from 'next/navigation'
+import { auth } from '@/lib/firebase/client'
+import { getIdToken, sendEmailVerification } from 'firebase/auth'
+import { useToast } from '@/lib/context/ToastProvider'
 
 
 
@@ -24,10 +27,9 @@ type FormValues = {
 }
 
 export default function AuthForm({ mode }: AuthFormProps) {
-
   const searchParams = useSearchParams()
   const redirectPath = searchParams.get('redirect') || '/dashboard'
-
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const {
@@ -42,36 +44,45 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true)
+
     try {
       if (mode === 'login') {
-        // TODO: 登录逻辑 - Firebase signInWithEmailAndPassword
-        const user = await loginWithEmail(data.email, data.password)
+        // 登录
+        await loginWithEmail(data.email, data.password)
 
-        await user.reload()
-        if (!user.emailVerified) {
+        // 强制刷新当前用户信息
+        await auth.currentUser?.reload()
+        const user = auth.currentUser
+
+        // 校验邮箱是否已验证
+        if (!user?.emailVerified) {
           router.push('/auth/verify-email')
           return
         }
-        // 登录成功后设置 Cookie
-        setAuthTokenCookie(user)
 
-        setTimeout(() => {
-          router.push(redirectPath)
-        }
-          , 1000) // 延迟 1 秒跳转到仪表盘
+        // 获取 token，并写入 Cookie
+        const token = await getIdToken(user, true)
+        await setAuthTokenCookie(token)
 
-        console.log('登录中...', data)
+        // 登录成功后重定向
+        router.push(redirectPath)
+
       } else {
-        // TODO: 注册逻辑 - Firebase createUserWithEmailAndPassword
+        // 注册
         const user = await registerWithEmail(data.email, data.password)
-        router.push('/auth/verify-email') // 发送邮箱验证邮件
 
+        // 主动发送邮箱验证邮件
+        await sendEmailVerification(user)
 
-        console.log('注册中...', data)
+        // 跳转到提示页面
+        router.push('/auth/verify-email')
       }
     } catch (err: any) {
-      // TODO: 错误处理
-      alert(err.message)
+      showToast({
+        type: 'error',
+        title: '操作失败',
+        description: err.message || '发生错误，请稍后再试。'
+      })
     } finally {
       setLoading(false)
     }
