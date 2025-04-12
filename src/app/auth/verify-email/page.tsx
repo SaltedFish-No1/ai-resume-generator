@@ -1,3 +1,4 @@
+// src/app/auth/verify-email/page.tsx
 'use client'
 
 import { useState } from 'react'

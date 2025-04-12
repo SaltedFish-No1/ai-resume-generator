@@ -1,10 +1,11 @@
-// app/auth/verified-success/page.tsx
 'use client'
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import Logo from '@/components/ui/Logo'
+import { auth } from '@/lib/firebase/client'
+import { getIdToken } from 'firebase/auth'
+import { setAuthTokenCookie } from '@/lib/auth/cookies'
 import { motion } from 'framer-motion'
 import { MouseSpotlight } from '@/components/ui/animations/MouseSpotlight'
 
@@ -12,10 +13,23 @@ export default function VerifiedSuccessPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push('/profile/edit')
-    }, 3000)
-    return () => clearTimeout(timer)
+    const verifyAndRedirect = async () => {
+      await auth.currentUser?.reload()
+      const user = auth.currentUser
+
+      if (user?.emailVerified) {
+        const token = await getIdToken(user, true)
+        await setAuthTokenCookie(token)
+
+        setTimeout(() => {
+          router.push('/profile/edit')
+        }, 2000)
+      } else {
+        router.push('/auth/verify-email')
+      }
+    }
+
+    verifyAndRedirect()
   }, [router])
 
   return (
@@ -27,13 +41,9 @@ export default function VerifiedSuccessPage() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="flex flex-col items-center space-y-4"
       >
-        <div className="relative w-20 h-20">
-          {/* <Logo className="absolute inset-0 w-full h-full animate-pulse text-primary" /> */}
-          <CheckCircleIcon className="w-20 h-20 text-success animate-in fade-in zoom-in" />
-        </div>
-
+        <CheckCircleIcon className="w-20 h-20 text-success animate-in fade-in zoom-in" />
         <h1 className="text-2xl font-semibold text-success">邮箱验证成功</h1>
-        <p className="text-sm text-muted">你已完成邮箱验证，3 秒后将跳转至资料填写页面。</p>
+        <p className="text-sm text-muted">即将跳转至资料填写页面，请稍候...</p>
       </motion.div>
     </main>
   )
