@@ -6,10 +6,7 @@ import {
     EducationData, 
     ExperienceData, 
     ProjectData, 
-    PublicationData, 
-    AwardsData, 
-    CertificationData, 
-    SocialLinksData, 
+    OtherInfoData,
     ResumeFileData 
   } from '@/types/resume'
   
@@ -53,20 +50,13 @@ import {
     return data.projects || []
   }
   
-  export function extractPublications(data: ResumeData): PublicationData {
-    return data.publications || []
-  }
-  
-  export function extractAwards(data: ResumeData): AwardsData {
-    return data.awards || []
-  }
-  
-  export function extractCertifications(data: ResumeData): CertificationData {
-    return data.certifications || []
-  }
-  
-  export function extractSocialLinks(data: ResumeData): SocialLinksData {
-    return data.socialLinks || []
+  export function extractOtherInfo(data: ResumeData): OtherInfoData {
+    const { publications, awards, certifications } = data
+    return {
+      publications,
+      awards,
+      certifications,
+    }
   }
   
   export function extractResumeFileUrl(data: ResumeData): ResumeFileData {

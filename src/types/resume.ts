@@ -49,39 +49,28 @@ export type ProjectItem = {
 }
 export type ProjectData = ProjectItem[]
 
-// 👇 6. 学术出版物
-export type PublicationItem = {
-  title: string
-  journal?: string
-  authors?: string
-  date?: string
-  link?: string
-  summary?: string
-}
-export type PublicationData = PublicationItem[]
 
-// 👇 7. 奖项
-export type AwardItem = {
-  title?: string
-  issuer?: string
-  date?: string
+// 6. 附加信息统一类型封装
+export type OtherInfoData = {
+  publications?: {
+    title: string
+    journal?: string
+    authors?: string
+    date?: string
+    link?: string
+    summary?: string
+  }[]
+  awards?: {
+    title?: string
+    issuer?: string
+    date?: string
+  }[]
+  certifications?: {
+    name?: string
+    issuer?: string
+    date?: string
+  }[]
 }
-export type AwardsData = AwardItem[]
-
-// 👇 8. 认证证书
-export type CertificationItem = {
-  name?: string
-  issuer?: string
-  date?: string
-}
-export type CertificationData = CertificationItem[]
-
-// 👇 9. 社交链接
-export type SocialLink = {
-  label: string
-  url: string
-}
-export type SocialLinksData = SocialLink[]
 
 // 👇 10. 简历文件（单字段）
-export type ResumeFileData = string | undefined
+// export type ResumeFileData = string | undefined

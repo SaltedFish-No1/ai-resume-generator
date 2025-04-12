@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes'
 import { ReactNode } from 'react'
 import Script from 'next/script'
 import { AuthProvider } from '@/lib/context/auth'
+import { ToastProvider } from '@/lib/context/ToastProvider'
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +17,9 @@ export default function Providers({ children }: { children: ReactNode }) {
 
       <AuthProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </ThemeProvider>
       </AuthProvider>
     </>

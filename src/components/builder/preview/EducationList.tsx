@@ -15,26 +15,31 @@ export default function EducationList({ data }: { data: EducationData }) {
   }
 
   return (
-    <ul className="space-y-4">
-      {items.map((edu, idx) => (
-        <li key={idx} className="rounded-lg p-4 bg-[hsl(var(--highlight))]">
-          <h4 className="font-semibold text-[hsl(var(--fg))]">
-            {edu.school} - {edu.degree}
-          </h4>
-          <div className="text-sm text-muted-foreground">
-            {edu.startDate} ~ {edu.endDate} {edu.gpa && `| GPA: ${edu.gpa}`}
-          </div>
+<ul className="space-y-4">
+  {items.map((edu, idx) => (
+    <li key={idx} className="rounded-lg p-4 bg-[hsl(var(--highlight))] space-y-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="font-semibold text-[hsl(var(--fg))]">
+          {edu.school}
+        </div>
+        <div className="text-sm text-muted-foreground whitespace-nowrap text-right">
+          {edu.startDate} ~ {edu.endDate}
+          
+        </div>
+      </div>
+      <div className="flex flex-row justify-between text-sm text-muted-foreground">
+        {edu.degree}
+        {edu.gpa && <span className="ml-2">GPA: {edu.gpa}</span>}
+      </div>
 
-          <EditableField
-            value={edu.description || ''}
-            onChange={(val) => handleChange(idx, val)}
-            onOptimize={() => {
-              // TODO: 集成字段优化逻辑
-              alert(`优化教育描述 ${idx + 1}`)
-            }}
-          />
-        </li>
-      ))}
-    </ul>
+      <EditableField
+        value={edu.description || ''}
+        onChange={(val) => handleChange(idx, val)}
+        onOptimize={() => alert(`优化教育描述 ${idx + 1}`)}
+      />
+    </li>
+  ))}
+</ul>
+
   )
 }
