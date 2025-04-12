@@ -45,9 +45,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
         }
         // 登录成功后设置 Cookie
         setAuthTokenCookie(user)
-
-        router.push('/dashboard') // 登录成功后跳转到仪表盘
-
+        
+        setTimeout(() => {
+            router.push('/dashboard')
+        }
+        , 1000) // 延迟 1 秒跳转到仪表盘
+        
         console.log('登录中...', data)
       } else {
         // TODO: 注册逻辑 - Firebase createUserWithEmailAndPassword

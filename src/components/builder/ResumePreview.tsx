@@ -5,13 +5,14 @@ import { useUser } from '@/lib/context/auth'
 import { db } from '@/lib/firebase/client'
 import { getDoc, doc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { ResumeData } from '@/lib/validators/resume'
+import { ResumeData } from '@/types/resume'
 import BasicInfo from '@/components/builder/preview/BasicInfo'
 import Section from '@/components/builder/preview/Section'
 import EducationList from '@/components/builder/preview/EducationList'
 import ExperienceList from '@/components/builder/preview/ExperienceList'
 import ProjectList from '@/components/builder/preview/ProjectList'
 import SkillsList from '@/components/builder/preview/SkillsList'
+import { extractBasicInfo } from '@/lib/utils/resumeUtils'
 
 async function getUserProfile(uid: string): Promise<ResumeData | null> {
   const docRef = doc(db, 'users', uid, 'profile', 'base')
@@ -46,9 +47,10 @@ export default function ResumePreview() {
       </div>
     )
 
+  
   return (
     <div className="max-w-3xl mx-auto p-6 rounded-xl shadow-lg bg-[hsl(var(--surface))] text-[hsl(var(--fg))]">
-      <BasicInfo data={profile} />
+      <BasicInfo data={extractBasicInfo(profile)} />
       <div className="divide-y divide-[hsl(var(--border))]">
         <Section title="教育经历">
           <EducationList data={profile.education} />

@@ -1,8 +1,9 @@
 // lib/firebase/client.ts
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, getDoc, doc } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage'; // 引入 Storage
+import { ResumeData } from '@/types/resume';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -22,3 +23,12 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0
 export const auth = getAuth(app);
 export const db = getFirestore(app);  // 导出 Firestore
 export const storage = getStorage(app); // 导出 storage
+
+
+
+// 获取用户简历数据
+export async function getUserProfile(uid: string): Promise<ResumeData | null> {
+  const docRef = doc(db, 'users', uid, 'profile', 'base')
+  const docSnap = await getDoc(docRef)
+  return docSnap.exists() ? (docSnap.data() as ResumeData) : null
+}

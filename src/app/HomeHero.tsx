@@ -6,24 +6,9 @@ import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { Button } from '@/components/ui/Button'
 import FireflyBackground from '@/components/ui/FireflyBackground'
 import { useTheme } from 'next-themes'
+import { MouseSpotlight } from '@/components/ui/animations/MouseSpotlight'
 
 export default function HomeHero() {
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-
-  const smoothX = useSpring(mouseX, { stiffness: 100, damping: 20 })
-  const smoothY = useSpring(mouseY, { stiffness: 100, damping: 20 })
-
-  const { resolvedTheme } = useTheme()
-
-  useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX)
-      mouseY.set(e.clientY)
-    }
-    window.addEventListener('mousemove', handleMove)
-    return () => window.removeEventListener('mousemove', handleMove)
-  }, [mouseX, mouseY])
 
   return (
     <section className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden px-6 py-24 text-center">
@@ -34,13 +19,8 @@ export default function HomeHero() {
         blur={resolvedTheme === 'dark' ? 'blur-xl' : 'blur-md'}
       /> */}
 
-      {/* 🌀 光圈（仅暗色下显示） */}
-      {resolvedTheme === 'dark' && (
-        <motion.div
-          style={{ left: smoothX, top: smoothY }}
-          className="absolute w-96 h-96 rounded-full bg-blue-400/30 blur-3xl opacity-40 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        />
-      )}
+      <MouseSpotlight />
+
 
       {/* 🧠 Hero 文案 */}
       <div className="relative z-20 w-full max-w-4xl px-4">

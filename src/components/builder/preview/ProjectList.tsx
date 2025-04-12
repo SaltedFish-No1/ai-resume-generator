@@ -1,5 +1,5 @@
 // components/preview/ProjectList.tsx
-import { ResumeData } from '@/lib/validators/resume'
+import { ResumeData } from '@/types/resume'
 import { ExternalLink } from 'lucide-react'
 
 export default function ProjectList({ data }: { data: ResumeData['projects'] }) {

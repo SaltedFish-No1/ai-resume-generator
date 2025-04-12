@@ -1,5 +1,6 @@
 // lib/validators/resume.ts
 import { z } from "zod";
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 export const resumeSchema = z.object({
   // 1. 基本信息
@@ -11,18 +12,26 @@ export const resumeSchema = z.object({
     .optional(),
   jobTitle: z.string().optional(),
   summary: z.string().optional(),
-  github: z.string().url("GitHub 链接不合法").optional(),
-  linkedin: z.string().url("LinkedIn 链接不合法").optional(),
+  availability: z.string().optional(),
+  locationPreference: z.string().optional(),
+  socialLinks: z
+    .array(
+      z.object({
+        label: z.string(),                  // 显示名称，例如“GitHub”、“LinkedIn”
+        url: z.string().url("链接格式错误") // URL 链接
+      })
+    )
+    .optional(),
 
   // 2. 技能列表
   skills: z
-  .array(
-    z.object({
-      name: z.string().min(1, "技能名不能为空"),
-      level: z.number().min(1).max(10),
-    })
-  )
-  .optional(),
+    .array(
+      z.object({
+        name: z.string().min(1, "技能名不能为空"),
+        level: z.number().min(1).max(10),
+      })
+    )
+    .optional(),
 
   // 3. 教育经历（必填至少一条）
   education: z
@@ -30,8 +39,8 @@ export const resumeSchema = z.object({
       z.object({
         school: z.string(),
         degree: z.string(),
-        startDate: z.string(), // 或 z.coerce.date()
-        endDate: z.string(),
+        startDate: z.string().regex(dateRegex, "日期格式为 MM/DD/YYYY"),
+        endDate: z.string().regex(dateRegex, "日期格式为 MM/DD/YYYY"),
         gpa: z.string().optional(),
         description: z.string().optional(),
       })
@@ -44,8 +53,8 @@ export const resumeSchema = z.object({
       z.object({
         company: z.string(),
         title: z.string(),
-        startDate: z.string(),
-        endDate: z.string(),
+        startDate: z.string().regex(dateRegex, "日期格式为 MM/DD/YYYY"),
+        endDate: z.string().regex(dateRegex, "日期格式为 MM/DD/YYYY"),
         description: z.string(),
       })
     )
@@ -57,6 +66,8 @@ export const resumeSchema = z.object({
       z.object({
         name: z.string(),
         techStack: z.array(z.string()),
+        startDate: z.string().regex(dateRegex, "日期格式为 MM/DD/YYYY").optional(),
+        endDate: z.string().regex(dateRegex, "日期格式为 MM/DD/YYYY").optional(),
         description: z.string(),
         link: z.string().url().optional(),
       })
@@ -64,6 +75,24 @@ export const resumeSchema = z.object({
     .optional(),
 
   // 6. 其他字段
+  publications: z
+    .array(
+      z.object({
+        title: z.string(),
+        journal: z.string().optional(),
+        authors: z.string().optional(),
+        date: z.string().optional(),
+        link: z
+          .union([
+            z.string().url('链接格式错误'),
+            z.literal('').transform(() => undefined)
+          ])
+          .optional(),
+        summary: z.string().optional(),
+      })
+    )
+    .optional(),
+
   awards: z
     .array(
       z.object({
@@ -84,23 +113,6 @@ export const resumeSchema = z.object({
     )
     .optional(),
 
-  languages: z
-    .array(
-      z.object({
-        language: z.string().optional(),
-        level: z.string().optional(),
-      })
-    )
-    .optional(),
-
-  interests: z.array(z.string()).optional(),
-
-  availability: z.string().optional(),
-
-  locationPreference: z.string().optional(),
-
+  // 用户上传的简历文件
   resumePdfUrl: z.string().url().optional(),
 });
-
-// 推导类型导出
-export type ResumeData = z.infer<typeof resumeSchema>;

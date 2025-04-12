@@ -1,24 +1,18 @@
-"use client";
+'use client'
 
-import { UseFormReturn, Controller } from "react-hook-form";
-import { ResumeData } from "@/lib/validators/resume";
-import { useState } from "react";
-import { Plus, X } from "lucide-react";
-import { SliderWithLabel } from "@/components/ui/SliderWithLable";
-
+import { UseFormReturn, Controller } from 'react-hook-form'
+import { ResumeData } from '@/types/resume'
+import { useState } from 'react'
+import { Plus, X } from 'lucide-react'
+import { SliderWithLabel } from '@/components/ui/SliderWithLable'
 
 type Props = {
-  form: UseFormReturn<ResumeData>;
-};
-
-type Skill = {
-  name: string;
-  level: number;
-};
+  form: UseFormReturn<ResumeData>
+}
 
 export function SkillsForm({ form }: Props) {
-  const { control } = form;
-  const [inputValue, setInputValue] = useState("");
+  const { control } = form
+  const [inputValue, setInputValue] = useState('')
 
   return (
     <section>
@@ -27,50 +21,54 @@ export function SkillsForm({ form }: Props) {
       <Controller
         name="skills"
         control={control}
-        defaultValue={[]} // ✅ 明确是 Skill[]
+        defaultValue={[]}
         render={({ field }) => {
-          const value: Skill[] = field.value ?? [];
-          const { onChange } = field;
+          const skills = field.value ?? []
+          const { onChange } = field
 
           const addSkill = () => {
-            const skillName = inputValue.trim();
-            if (
-              skillName.length > 0 &&
-              !value.some((item) => item.name === skillName)
-            ) {
-              onChange([...value, { name: skillName, level: 5 }]);
-              setInputValue("");
-            }
-          };
+            const trimmed = inputValue.trim()
+            if (!trimmed) return
+            if (skills.some((s) => s.name.toLowerCase() === trimmed.toLowerCase())) return
+
+            onChange([...skills, { name: trimmed, level: 5 }])
+            setInputValue('')
+          }
 
           const removeSkill = (index: number) => {
-            const updated = [...value];
-            updated.splice(index, 1);
-            onChange(updated);
-          };
+            const updated = skills.filter((_, i) => i !== index)
+            onChange(updated)
+          }
 
           const updateLevel = (index: number, newLevel: number) => {
-            const updated = [...value];
-            updated[index].level = newLevel;
-            onChange(updated);
-          };
+            const updated = [...skills]
+            updated[index].level = newLevel
+            onChange(updated)
+          }
 
           return (
             <>
-              {/* 添加输入框 */}
+              {/* 输入添加区域 */}
               <div className="flex items-center gap-2 mb-4">
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
-                  className="flex-1 bg-surface border border-border rounded px-3 py-2 text-fg"
-                  placeholder="输入技能后点击添加"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      addSkill()
+                    }
+                  }}
+                  placeholder="输入技能名后点击添加"
+                  className="flex-1 bg-surface text-fg border border-border rounded px-3 py-2 text-sm"
                 />
                 <button
                   type="button"
                   onClick={addSkill}
-                  className="px-3 py-2 rounded bg-primary text-white hover:bg-primary-hover transition flex items-center gap-1"
+                  disabled={!inputValue.trim()}
+                  aria-label="添加技能"
+                  className="px-3 py-2 rounded-md bg-primary text-white hover:bg-primary-hover disabled:opacity-50 transition flex items-center gap-1"
                 >
                   <Plus size={16} />
                   添加
@@ -78,27 +76,29 @@ export function SkillsForm({ form }: Props) {
               </div>
 
               {/* 技能列表 */}
-              {value.length > 0 && (
-                <div className="space-y-4">
-                  {value.map((item, index) => (
+              {skills.length === 0 ? (
+                <p className="text-sm text-muted-foreground">暂无技能，请先添加</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {skills.map((skill, index) => (
                     <div
                       key={index}
-                      className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-2"
+                      className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-3"
                     >
                       <div className="flex justify-between items-center">
-                        <span className="text-fg font-medium">{item.name}</span>
+                        <span className="text-fg font-medium truncate">{skill.name}</span>
                         <button
                           type="button"
                           onClick={() => removeSkill(index)}
-                          className="text-muted hover:text-danger"
-                          title="删除技能"
+                          className="text-muted-foreground hover:text-danger"
+                          aria-label={`删除 ${skill.name}`}
                         >
                           <X size={16} />
                         </button>
                       </div>
 
                       <SliderWithLabel
-                        value={item.level}
+                        value={skill.level}
                         onChange={(val) => updateLevel(index, val)}
                       />
                     </div>
@@ -106,9 +106,9 @@ export function SkillsForm({ form }: Props) {
                 </div>
               )}
             </>
-          );
+          )
         }}
       />
     </section>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-// middleware.ts ✅ 简版，只判断是否已登录
+// middleware.ts
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(request: NextRequest) {
@@ -14,6 +14,8 @@ export function middleware(request: NextRequest) {
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
   }
+
+  
 
   return NextResponse.next()
 }

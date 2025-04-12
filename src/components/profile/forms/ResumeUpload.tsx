@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
-import { ResumeData } from '@/lib/validators/resume'
+import { ResumeData } from '@/types/resume'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from '@/lib/firebase/client'
 import { Button } from '@/components/ui/Button'

@@ -1,5 +1,5 @@
 // components/preview/SkillsList.tsx
-import { ResumeData } from '@/lib/validators/resume'
+import { ResumeData } from '@/types/resume'
 
 export default function SkillsList({ data }: { data: ResumeData['skills'] }) {
   if (!data || data.length === 0)

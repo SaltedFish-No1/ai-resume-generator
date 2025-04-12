@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { UseFormReturn, useFieldArray } from "react-hook-form";
-import { ResumeData } from "@/lib/validators/resume";
-import { Plus, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { UseFormReturn, useFieldArray } from 'react-hook-form'
+import { ResumeData } from '@/types/resume'
+import { Plus, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 
 interface Props {
-  form: UseFormReturn<ResumeData>;
+  form: UseFormReturn<ResumeData>
 }
 
 export function ExperienceFormList({ form }: Props) {
@@ -14,12 +14,12 @@ export function ExperienceFormList({ form }: Props) {
     control,
     register,
     formState: { errors },
-  } = form;
+  } = form
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "experience",
-  });
+    name: 'experience',
+  })
 
   return (
     <section>
@@ -37,6 +37,11 @@ export function ExperienceFormList({ form }: Props) {
                 {...register(`experience.${index}.company`)}
                 className="w-full bg-surface text-fg border border-border rounded px-3 py-2"
               />
+              {errors.experience?.[index]?.company && (
+                <p className="text-danger text-sm mt-1">
+                  {errors.experience[index]?.company?.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -45,9 +50,16 @@ export function ExperienceFormList({ form }: Props) {
                 {...register(`experience.${index}.title`)}
                 className="w-full bg-surface text-fg border border-border rounded px-3 py-2"
               />
+              {errors.experience?.[index]?.title && (
+                <p className="text-danger text-sm mt-1">
+                  {errors.experience[index]?.title?.message}
+                </p>
+              )}
             </div>
+          </div>
 
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="col-span-full md:col-span-1">
               <label className="block font-medium text-fg">开始日期 *</label>
               <input
                 type="date"
@@ -56,7 +68,7 @@ export function ExperienceFormList({ form }: Props) {
               />
             </div>
 
-            <div>
+            <div className="col-span-full md:col-span-1">
               <label className="block font-medium text-fg">结束日期 *</label>
               <input
                 type="date"
@@ -78,7 +90,7 @@ export function ExperienceFormList({ form }: Props) {
             <button
               type="button"
               onClick={() => remove(index)}
-              className="text-muted hover:text-danger transition"
+              className="text-muted-foreground hover:text-danger transition"
               title="删除经历"
             >
               <Trash2 size={16} />
@@ -87,25 +99,22 @@ export function ExperienceFormList({ form }: Props) {
         </div>
       ))}
 
-
       <Button
         type="button"
         onClick={() =>
           append({
-            company: "",
-            title: "",
-            startDate: "",
-            endDate: "",
-            description: "",
+            company: '',
+            title: '',
+            startDate: '',
+            endDate: '',
+            description: '',
           })
         }
-        variant="secondary" // 或者 primary，根据语义选择
-        className="mt-2"
+        variant="secondary"
       >
-        <Plus size={16} />
+        <Plus className="mr-2" size={16} />
         添加经历
       </Button>
-
     </section>
-  );
+  )
 }

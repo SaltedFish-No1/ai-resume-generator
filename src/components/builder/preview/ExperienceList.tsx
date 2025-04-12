@@ -1,5 +1,5 @@
 // components/preview/ExperienceList.tsx
-import { ResumeData } from '@/lib/validators/resume'
+import { ResumeData } from '@/types/resume'
 
 export default function ExperienceList({ data }: { data: ResumeData['experience'] }) {
   return (

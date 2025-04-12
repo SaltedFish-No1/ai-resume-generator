@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { optimizeResume } from '@/lib/ai/optimizeResume'
 import resumes from './mockResume.json'
-import { ResumeData } from '@/lib/validators/resume'
+import { ResumeData } from '@/types/resume'
 
 const resumeKeys = Object.keys(resumes) as (keyof typeof resumes)[]
 
