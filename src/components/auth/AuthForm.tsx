@@ -47,8 +47,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
         // TODO: 登录逻辑 - Firebase signInWithEmailAndPassword
         const user = await loginWithEmail(data.email, data.password)
 
+        await user.reload()
         if (!user.emailVerified) {
-          return router.push('/auth/verify-email')
+          router.push('/auth/verify-email')
+          return
         }
         // 登录成功后设置 Cookie
         setAuthTokenCookie(user)
@@ -117,14 +119,6 @@ export default function AuthForm({ mode }: AuthFormProps) {
           )}
         </div>
       )}
-
-      {/* <button
-        type="submit"
-        className="w-full px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-md transition disabled:opacity-50"
-        disabled={loading}
-      >
-        {loading ? '提交中...' : mode === 'login' ? '登录' : '注册'}
-      </button> */}
 
       <Button
         type="submit"
