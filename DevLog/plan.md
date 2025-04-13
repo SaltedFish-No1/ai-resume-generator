@@ -2,7 +2,6 @@
 
 AI Resume Generator 是一个基于现代技术栈构建的 AI 简历生成器项目，目标是实现一个支持内容生成、实时预览和 PDF 导出的智能工具。在这个过程中，我将以“边做边学”的方式系统学习 **Next.js（App Router）**、**React**、**Tailwind CSS**、**Firebase** 和 **OpenAI API**。
 
-
 ---
 
 ## ✨ 技术栈
@@ -14,71 +13,164 @@ AI Resume Generator 是一个基于现代技术栈构建的 AI 简历生成器�
 | 状态管理   | React 本地状态 + Server Actions  |
 | 表单处理   | `react-hook-form` + `zod`        |
 | 后端服务   | **Firebase（Auth + Firestore）** |
-| AI 服务    | **OpenAI GPT-4 API**             |
+| AI 服务    | **OpenAI API** + **DeepSeek**             |
 | PDF 导出   | `@react-pdf/renderer`            |
 | 国际化     | `next-intl`（中英文切换）        |
 | 认证与守卫 | Middleware + Firebase Token 验证 |
 
 ---
-
 ## 📦 项目结构（已完成）
 
 当前采用推荐的 `src/` 架构，并使用 App Router：
 
 ```bash
-ai-resume-generator/
-├── src/
-│   ├── app/                        # App Router 页面和路由
-│   │   ├── layout.tsx             # 全局布局
-│   │   ├── page.tsx               # 首页（Landing）
-│   │   ├── builder/               # 简历生成页面
-│   │   │   ├── page.tsx
-│   │   │   └── actions.ts         # Server Actions: 保存简历 + 调 GPT
-│   │   ├── auth/                  # 登录/注册页面
-│   │   │   ├── login/page.tsx
-│   │   │   └── register/page.tsx
-│   │   └── [locale]/              # 动态多语言支持路由
-│   │
-│   ├── components/                # 所有 UI/功能组件
-│   │   ├── layout/                # Header / Footer / ThemeProvider
-│   │   ├── forms/                 # 表单组件（用户信息、经历等）
-│   │   ├── preview/               # 简历实时预览模块
-│   │   ├── pdf/                   # PDF 导出
-│   │   ├── ui/                    # 通用按钮、输入框、切换器
-│   │   └── icons/                 # 图标（可选）
-│   │
-│   ├── lib/                       # 工具方法 & Firebase 封装
-│   │   ├── firebase/
-│   │   │   ├── client.ts         # Firebase SDK 初始化（客户端）
-│   │   │   ├── admin.ts          # Firebase Admin SDK（服务端）
-│   │   │   ├── auth.ts           # 登录注册逻辑封装
-│   │   │   └── firestore.ts      # CRUD 简历数据封装
-│   │   ├── openai.ts             # 调用 OpenAI API 方法
-│   │   ├── utils.ts              # 工具函数（日期格式化等）
-│   │   └── validators.ts         # zod 表单验证 schema
-│   │
-│   ├── i18n/                      # 多语言配置与资源
-│   │   ├── config.ts
-│   │   ├── en.json
-│   │   └── zh.json
-│   │
-│   ├── types/                     # 类型定义
-│   │   ├── resume.ts
-│   │   └── user.ts
-│   │
-│   └── styles/                    # 全局样式文件
-│       ├── globals.css
-│       └── theme.css
+src/
+├── app/                            # ✅ App Router 主入口，按页面组织路由
+│   ├── api/                        # 📡 接口目录（适用于 Server Actions 或 API 路由）
+│   │   └── optimize/               # GPT 简历优化接口
+│   │       ├── optimizeClient.ts   # 客户端调用封装（封装 fetch 请求）
+│   │       └── route.ts            # API 路由处理 GPT 请求
 │
-├── public/                        # 静态资源（图片、favicon）
+│   ├── auth/                       # 🔐 认证相关页面
+│   │   ├── login/                  # 登录页
+│   │   │   └── page.tsx
+│   │   ├── register/               # 注册页
+│   │   │   └── page.tsx
+│   │   ├── verified-success/       # 邮箱验证成功提示页
+│   │   │   └── page.tsx
+│   │   └── verify-email/           # 等待邮箱验证页
+│       └── page.tsx
 │
-├── middleware.ts                  # 中间件：语言切换、auth 检查
-├── .env.local                     # 环境变量（Firebase、OpenAI）
-├── tailwind.config.js             # Tailwind 配置
-├── postcss.config.js              # PostCSS 配置
-├── next.config.js                 # Next.js 配置
-├── tsconfig.json                  # TypeScript 配置
-└── README.md                      # 项目说明文档
+│   ├── builder/                    # 🛠️ 简历构建页（职位 + JD 输入 + GPT 生成）
+│   │   ├── layout.tsx              # 注入 ResumeBuilderContext
+│   │   └── page.tsx                # 主体页面：输入 + 预览双栏结构
+│
+│   ├── dashboard/                  # 🧭 未来用于简历历史或仪表盘
+│   │   └── page.tsx
+│
+│   ├── debug/                      # 🧪 调试页面集合（仅开发使用）
+│   │   ├── ai-test/                # GPT 生成测试
+│   │   │   ├── mockResume.json
+│   │   │   └── page.tsx
+│   │   ├── animation-test/         # 动画组件调试
+│   │   ├── auth-status/            # 当前用户状态调试
+│   │   ├── color-test/             # Tailwind HSL 配色调试
+│   │   ├── firebase-test/          # Firebase 基础连接调试
+│   │   ├── form-test/              # 表单调试
+│   │   ├── logo-test/              # logo 渲染测试
+│   │   ├── middleware-test/        # 中间件保护页测试
+│   │   └── page.tsx
+│
+│   ├── HomeHero.tsx                # 首页主视觉组件（可提取成组件）
+│   ├── layout.tsx                  # 全局布局（Header + Footer 包裹）
+│   ├── page.tsx                    # 首页页面（landing）
+│
+│   ├── profile/                    # 👤 用户信息管理页面
+│   │   ├── account/                # 账户信息页（预留）
+│   │   └── edit/                   # 用户简历信息编辑页
+│   │       └── page.tsx
+│
+│   └── [locale]/                   # 🌍 多语言路由支持目录（动态语言切换）
+│
+├── components/                     # 🧩 所有可复用的 UI 和业务组件
+│   ├── auth/                       # 登录注册表单封装组件
+│   │   ├── AuthForm.tsx
+│   │   └── AuthFormSkeleton.tsx
+│
+│   ├── builder/                    # 简历构建页面专属组件
+│   │   ├── BuilerHeader.tsx        # 顶部操作栏（按钮/保存等）
+│   │   ├── JobDescriptionForm.tsx  # JD 输入表单
+│   │   ├── preview/                # 简历预览子模块
+│   │   │   ├── BasicInfo.tsx       # 个人信息展示
+│   │   │   ├── EditableField.tsx   # 可编辑字段（预留）
+│   │   │   ├── EducationList.tsx   # 教育经历
+│   │   │   ├── ExperienceList.tsx  # 工作经历
+│   │   │   ├── OtherInfoList.tsx   # 获奖、证书等
+│   │   │   ├── ProjectList.tsx     # 项目经历
+│   │   │   ├── Section.tsx         # 分区标题封装
+│   │   │   └── SkillsList.tsx      # 技能列表
+│   │   ├── ResumePreview.tsx       # 全部预览区组合
+│   │   └── skeletons/
+│   │       └── ResumePreviewSkeleton.tsx
+│
+│   ├── icons/                      # 自定义图标集合（如 SVG 组件）
+│
+│   ├── layout/                     # 全局布局组件
+│   │   ├── Footer.tsx
+│   │   ├── Header.tsx
+│   │   ├── LocaleSwitcher.tsx     # 多语言切换按钮（占位）
+│   │   ├── Providers.tsx          # 注入 Provider（Theme / Auth / Toast）
+│   │   └── UserMenu.tsx           # 登录用户菜单
+│
+│   ├── pdf/                        # PDF 渲染导出组件（MVP7）
+│
+│   ├── profile/                    # 用户资料页表单组件
+│   │   ├── forms/
+│   │   │   ├── BasicInfoForm.tsx
+│   │   │   ├── EducationFormList.tsx
+│   │   │   ├── ExperienceFormList.tsx
+│   │   │   ├── OtherInfoForm.tsx
+│   │   │   ├── ProjectFormList.tsx
+│   │   │   ├── ResumeUpload.tsx
+│   │   │   ├── skeletons/
+│   │   │   │   └── ProfileEditSkeleton.tsx
+│   │   │   └── SkillsForm.tsx
+│
+│   └── ui/                         # 通用组件（跨模块复用）
+│       ├── ActionMenu.tsx
+│       ├── animations/
+│       │   ├── LoadingIndicator.tsx
+│       │   └── MouseSpotlight.tsx
+│       ├── Button.tsx
+│       ├── FireflyBackground.tsx
+│       ├── Logo.tsx
+│       ├── LogoWithText.tsx
+│       ├── Skeleton.tsx
+│       ├── SliderWithLable.tsx
+│       ├── TagInput.tsx
+│       ├── ThemeToggle.tsx
+│       └── UserMenu.tsx            # 与 layout 的重复名，可合并命名
+│
+├── i18n/                           # 🌍 多语言支持配置
+│   ├── cn.json
+│   ├── en.json
+│   └── config.ts                   # next-intl 配置
+│
+├── lib/                            # 工具函数 / 服务封装
+│   ├── ai/                         # AI 调用封装
+│   │   ├── optimizeResume.ts       # GPT 调用逻辑
+│   │   └── promptUtils.ts          # prompt 模板工具
+│
+│   ├── auth/                       # Cookie 设置 / 解析
+│   │   └── cookies.ts
+│
+│   ├── context/                    # 全局状态管理（React Context）
+│   │   ├── auth.tsx                # 用户认证上下文
+│   │   ├── builder/ResumeBuilderContext.tsx  # 简历构建上下文
+│   │   └── ToastProvider.tsx       # 全局通知组件
+│
+│   ├── firebase/                   # Firebase SDK 初始化
+│   │   ├── auth.ts                 # 登录/注册逻辑
+│   │   ├── client.ts               # 前端 SDK 初始化
+│
+│   ├── hooks/                      # 自定义 Hook
+│   │   └── useResumeAction.ts      # 简历保存、下载等行为封装
+│
+│   ├── utils/                      # 通用工具函数
+│   │   ├── formUtils.ts
+│   │   ├── resumeUtils.ts          # 分解 / 提取简历结构
+│   │   └── utils.ts
+│
+│   └── validators/                 # 表单校验 schema（zod）
+│       └── resume.ts
+│
+├── middleware.ts                   # 🛡️ 中间件：语言切换 + 认证校验
+├── styles/
+│   └── globals.css                 # 全局 CSS 样式
+└── types/                          # 类型定义
+    ├── resume.ts
+    └── user.ts
+
 ```
 
 ---
@@ -168,12 +260,6 @@ ai-resume-generator/
 
 🚀 推荐在你掌握了表单、页面间跳转、基本状态管理后，再进入这些系统性的增强功能：
 
-| 功能         | 推荐实现时间 | 所属 MVP |
-|--------------|----------------|----------|
-| 暗黑模式     | 完成表单、初步布局逻辑后 | MVP 4 或 MVP 7 |
-| 多语言支持   | 完成静态文案集中整理后 | MVP 3 之后，作为单独任务 |
-
-
 ---
 
 ### ✅ MVP 2：用户认证系统 🔐
@@ -222,7 +308,7 @@ ai-resume-generator/
 
 - [ ] 简历 PDF 文件上传成功后解析（使用 GPT）
 - [ ] 设置 Firebase Storage 的 CORS（需 CLI 配置）
-- [ ] 表单校验规则增强（如电话格式、URL 校验等）
+- [x] 表单校验规则增强（如电话格式、URL 校验等）
 - [ ] 上传文件进度条（优化 UX，可选）
 
 ---
@@ -244,139 +330,116 @@ ai-resume-generator/
 
 > 🎯 目标：用户输入 Job Description，系统结合已有简历信息，生成个性化简历草稿并实时预览。
 
----
+#### ✅ 已完成：
 
-#### 📝 ToDo List：
-
-- [ ] 页面布局为响应式双栏结构（左侧输入，右侧预览）
-- [ ] 表单输入：
-  - [ ] 职位名称（可选）
-  - [ ] 职位描述 JD（多行文本，必填）
-- [ ] 状态管理：
-  - [ ] 使用 `useState` 管理职位名与 JD 内容
-  - [ ] 使用 `useEffect` 模拟 GPT 响应流程（展示 loading）
-- [ ] 数据整合：
-  - [ ] 读取用户简历表单数据（来自 Firestore / RHF）
-  - [ ] 组合 JD 与用户数据，预留 GPT prompt 接口
-- [ ] 简历预览模块：
-  - [ ] 实时渲染：项目、经历、技能、简介等智能生成草稿
-  - [ ] 可独立封装子模块：BasicInfoPreview、ProjectPreview 等
-  - [ ] 使用 Skeleton 提升加载体验
+- [x] 页面结构：使用 `ResumeBuilderLayout` 注入上下文，`BuilderHeader` + `JobDescriptionForm` + `ResumePreview` 布局完成
+- [x] 使用 `ResumeBuilderContext` 实现：
+  - 职位输入（jobTitle, jobDesc）
+  - 用户简历数据管理（basicInfo, skills, experience...）
+- [x] Firestore 加载原始简历：`/users/{uid}/profile/base`
+- [x] ResumePreview 完成分区渲染（教育经历、项目、技能等）
 
 ---
-
-#### 📚 学习重点：
-
-- `flex-col md:flex-row` 构建响应式布局
-- `useState` / `useEffect` 实现输入联动与模拟 GPT 请求
-- 表单状态的双向绑定（输入 → 渲染）
-- React 组件解耦与 props 管理
-- 模拟异步流程：生成简历按钮 → loading → 渲染结果
-- 输入框 + 上传数据的联合处理模式（多源输入）
-------
 
 ### ✅ MVP 5：接入 OpenAI GPT 生成简历
 
 > 🎯 目标：调 OpenAI API，根据用户资料 + JD 生成个性化简历内容。
 
-#### 📝 ToDo List：
+#### ✅ 已完成：
 
-- [ ] 封装 `lib/openai.ts`，构造 prompt + 请求
-- [ ] 创建 `app/builder/actions.ts` 中 Server Action 进行服务端请求
-- [ ] 接收内容后更新 preview 内容
-- [ ] 处理 loading 状态 / 报错提示
+- [x] 构造 prompt：结合 jobTitle、jobDesc、原始简历
+- [x] 接入 GPT 请求方法：`callOptimizeAPI()`（调用优化接口）
+- [x] 优化触发按钮：`handleOptimize()` 内封装 loading + toast 提示
+- [x] 使用 `extractXXX()` 方法分发优化后的数据
+- [x] 状态联动更新 UI：更新 ResumePreview 内容
 
 📚 学习重点：
 
-- GPT prompt 构建技巧
-- Server Actions 基本用法
-- 服务端异步数据请求 + 客户端渲染反馈
+| 项目                      | 说明 |
+|---------------------------|------|
+| Prompt 构建               | 使用职位名 + JD + 简历结构生成 GPT 输入 |
+| 状态管理封装              | 使用 `ResumeBuilderContext` 管理生成数据 |
+| API 封装与错误处理        | 使用 `callOptimizeAPI()` 并结合 toast 提示 |
+| 异步流程体验              | loading 状态处理、fallback 提示优化 |
+| 客户端预览联动渲染        | 数据结构统一更新至 preview 渲染区 |
 
-------
+#### 📌 待办：
 
-### ✅ MVP 6：数据持久化到 Firebase Firestore
+- [ ] 更新ResumePreview相关组件，实现对简历的每一部分+prompt精准优化
+
+---
+
+### ⏳ MVP 6：数据持久化到 Firebase Firestore
 
 > 🎯 目标：将生成后的简历保存，支持查看 / 编辑 / 导出。
 
 #### 📝 ToDo List：
 
-- [ ] 初始化 Firebase Admin SDK（用于 Server Action 写入）
-- [ ] 创建简历保存接口，路径为：`users/{uid}/resumes/{resumeId}`
-- [ ] 预留 resume 列表接口（可用于历史简历管理）
-- [ ] 确保用户只能访问自己数据（Firestore Rules）
+- [ ] 封装 `handleSave()` 方法，调用 `firestore.ts` 保存数据
+- [ ] 路径设计：`users/{uid}/resumes/{resumeId}`
+- [ ] 生成 resumeId（可用 `nanoid()` 或 Firestore auto id）
+- [ ] 支持 resume list 接口（预留历史记录展示页）
+- [ ] Firestore 规则限制用户仅访问自己的简历
 
 📚 学习重点：
 
-- Admin SDK 使用（服务端安全访问）
-- Firestore 数据结构设计
-- 权限验证 & 用户绑定数据策略
+- Firestore 数据写入与更新
+- Firestore Rules 权限控制
+- 服务端写入建议使用 Admin SDK（或 Server Actions）
 
-------
+---
 
-### ✅ MVP 7：PDF 导出功能 📄
+### ⏳ MVP 7：PDF 导出功能 📄
 
 > 🎯 目标：一键将简历导出为 PDF 文件。
 
 #### 📝 ToDo List：
 
-- [ ] 使用 `@react-pdf/renderer` 构建 resume PDF 模板
-- [ ] 添加「导出 PDF」按钮
-- [ ] 下载生成的 PDF，支持命名
-- [ ] 保持样式一致（主题色 + 字体）
+- [ ] 使用 `@react-pdf/renderer` 构建简历模板
+- [ ] 支持导出当前 preview 为 PDF
+- [ ] 样式保持一致（配色 + 字体）
+- [ ] 可命名保存 + 支持历史下载
 
-📚 学习重点：
+---
 
-- 动态数据渲染 PDF
-- `@react-pdf/renderer` 使用方法
-- PDF 性能优化（懒加载、组件拆分）
+### ⏳ MVP 8：项目增强与扩展
 
-------
-
-### ✅ MVP 8：项目增强与扩展（暗黑模式 / 多语言 / 响应式优化）
-
-> 🎯 目标：提升产品完整性与可国际化能力。
+> 🎯 目标：增强用户体验与国际化能力。
 
 #### 📝 ToDo List：
 
-- [ ] 使用 `next-themes` 实现主题切换
-- [ ] 接入 `next-intl` 管理中英文翻译文件
-- [ ] 响应式优化各表单 / 卡片 / 预览组件
-- [ ] 多语言切换按钮接入实际逻辑（语言记忆）
+- [ ] 多语言切换（使用 `next-intl` + `[locale]/`）
+- [ ] 响应式细节打磨
+- [ ] 用户偏好持久化（语言、主题）
 
-📚 学习重点：
+---
 
-- 主题切换与 CSS 变量联动
-- i18n 路由结构 & 文案管理
-- 多语言布局适配 & 用户偏好处理
+## 🧭 项目上线节奏建议
 
-------
+| 阶段    | 上线建议 |
+|---------|----------|
+| MVP 1~3 | ✅ 基础功能上线 |
+| MVP 4~5 | ✅ 内容生成上线 |
+| MVP 6   | ✅ 支持保存，推荐上线 |
+| MVP 7~8 | 可选功能增强，可持续迭代上线 |
 
-### 🧭 最终建议开发节奏
+---
 
-| 阶段  | 任务概括              | 是否可上线演示 |
-| ----- | --------------------- | -------------- |
-| MVP 1 | 首页 + 配色系统       | ✅ 是           |
-| MVP 2 | 登录注册              | ✅ 是           |
-| MVP 3 | 用户资料填写          | ✅ 是           |
-| MVP 4 | 简历构建页面          | ✅ 是           |
-| MVP 5 | GPT 内容生成          | ✅ 是           |
-| MVP 6 | Firestore 保存记录    | ✅ 是           |
-| MVP 7 | PDF 导出              | ✅ 是           |
-| MVP 8 | 多语言 / 暗黑模式增强 | ✅ 可选         |
+## ✅ 当前开发状态小结
 
-
-#### 🧭 开发提示
-
-- 每完成一个 MVP，建议写一份 dev log 或 issue 小结 ✅
-- 尝试部署到 Vercel，持续集成测试自己的产品上线流程
-- 保持模块化、组件化开发，写小组件，常封装，注重复用
-- 不要“等会再学”，每一步尽量 **边做边理解边输出**
+| 功能模块 | 状态 | 备注 |
+|----------|------|------|
+| 用户信息编辑 | ✅ 已完成 | Firestore 存储 + RHF 表单 |
+| JD 输入 + 构建页 | ✅ 已完成 | 页面 + 状态联动完成 |
+| GPT 内容生成 | ✅ 已完成 | 接入 OpenAI + 优化逻辑 |
+| 简历保存 | ⏳ 进行中 | 即将封装 `handleSave` |
+| PDF 导出 | ⏳ 未开始 | MVP 7 启动项 |
 
 ---
 
 ## 🧑‍💻 作者
 
-Created by Haotian Chen 
+Created by Haotian Chen  
 📧 huntchen00@gmail.com / GitHub / huntchen.me
 
 ---

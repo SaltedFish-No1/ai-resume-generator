@@ -35,7 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/debug/firebase-test"
-  ],
+, "scripts/print-structure.js", "print -structure.js"  ],
   "exclude": [
     "node_modules"
   ]
