@@ -31,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <main className="flex-1 pt-16">
               {children}
+              <SpeedInsights />
             </main>
             <Footer />
           </div>
