@@ -88,7 +88,7 @@ ai-resume-generator/
 ## 作者 / Author
 
 Created by Haotian Chen  
-📧 [huntchen00@gmail.com](mailto:huntchen00@gmail.com) · [GitHub](https://github.com/huntchen) · [个人主页 / Personal Website](https://huntchen.me)
+📧 [huntchen00@gmail.com](mailto:huntchen00@gmail.com) · [GitHub](https://github.com/huntchen) · [个人主页 / Personal Website](hchen.me)
 
 ---
 
