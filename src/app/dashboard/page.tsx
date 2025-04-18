@@ -25,7 +25,7 @@ export default function DashboardPage() {
                     href="/profile/edit"
                 />
                 <DashboardCard
-                    title="AI 构建简历(未实现)"
+                    title="AI 构建简历(实现中)"
                     description="输入 JD，一键生成个性化简历"
                     href="/builder"
                 />
