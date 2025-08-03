@@ -47,23 +47,36 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
     try {
       if (mode === 'login') {
+        console.log('🚀 Starting login process...')
+        
         // 登录
-        await loginWithEmail(data.email, data.password)
-
-        // 强制刷新当前用户信息
-        await auth.currentUser?.reload()
-        const user = auth.currentUser
+        const userCredential = await loginWithEmail(data.email, data.password)
+        const user = userCredential
+        console.log('Login successful, user:', user?.email)
 
         // 校验邮箱是否已验证
-        if (!user?.emailVerified) {
+        if (!user.emailVerified) {
+          console.log('Email not verified, redirecting to verify page')
           router.push('/auth/verify-email')
           return
         }
 
+        console.log('Email verified')
+
         // 获取 token，并写入 Cookie
         const token = await getIdToken(user, true)
+        console.log('🎫 Got token, length:', token?.length)
+        
         await setAuthTokenCookie(token)
+        console.log('🍪 Cookie set successfully')
 
+        showToast({
+          type: 'success',
+          title: '登录成功',
+          description: '正在跳转...'
+        })
+
+        console.log(' Redirecting to:', redirectPath)
         // 登录成功后重定向
         router.push(redirectPath)
 
@@ -71,10 +84,17 @@ export default function AuthForm({ mode }: AuthFormProps) {
         // 注册 + 
         const user = await registerWithEmail(data.email, data.password)
 
+        showToast({
+          type: 'success',
+          title: '注册成功',
+          description: '请查看邮箱验证链接'
+        })
+
         // 跳转到提示页面
         router.push('/auth/verify-email')
       }
     } catch (err: any) {
+      console.error('❌ Auth error:', err)
       showToast({
         type: 'error',
         title: '操作失败',
